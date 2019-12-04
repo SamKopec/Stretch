@@ -12,4 +12,4 @@ package-lock.json
 *.njsproj
 *.sln
 
-../src/myInfo.js
+src/myInfo.js
