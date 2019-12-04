@@ -2,7 +2,7 @@
   <div>
       <div class="flex top-bar">
         <div><router-link class="arrow-red" tag="div" to="/dashboard"></router-link></div>
-        <div :class="determineIcon()" @click="pauseTimer"></div>
+        <div :class="determineIcon()" v-if="!waiting" @click="pauseTimer"></div>
       </div>
       <div class="image-stretch">
         <img :src="session[currentIndex].icon"></img>
@@ -11,13 +11,15 @@
       <div class="timer-container">
         <h1 class="timer blue-text">{{clock}}</h1>
       </div>
-      <div v-if="waiting" class="modal">{{num}}</div>
-      <app-circle class="move-it"></app-circle>
+      <!-- <div v-if="waiting" class="modal">{{num}}</div> -->
+      <app-rest v-if="waiting" :num="num"></app-rest>
+      <app-circle  class="move-it"></app-circle>
   </div>
 </template>
 
 <script>
   import Circle from './Circle.vue'
+  import Rest from './Rest.vue'
   export default {
     data () {
       return {
@@ -37,7 +39,8 @@
       }
     }, 
     components: {
-        'app-circle': Circle
+        'app-circle': Circle,
+        'app-rest': Rest
     },
     methods: {
       startTimer(){

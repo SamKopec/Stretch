@@ -51,7 +51,7 @@
 	    }
 	  }, 
 	  components: {
-	      'app-circle': Circle
+	      'app-circle': Circle,
 	  },
 	  methods: {
 	  },
