@@ -1,0 +1,9 @@
+stretches: [
+	{'name': 'Forward Stretch', icon: 'null'},
+	{'name': 'Forward Bend', icon: 'null'},
+	{'name': 'Butterfly', icon: 'null'},
+	{'name': 'Leg Raise', icon: 'null'},
+	{'name': 'Lunge', icon: 'null'},
+	{'name': 'Single Leg Forward', icon: 'null'},
+	{'name': 'Step Forward', icon: 'null'}
+]
