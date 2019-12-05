@@ -1,5 +1,10 @@
 <template>
   <div>
+  	<div v-if="toastVisible"  class="toast">
+  		<div class="red-text tiny-text white-back">	
+  			Your changes have been saved
+  		</div>
+  	</div>
 		<div class="push-right title-container">
       <h2 class="biggish-text blue-text">Welcome, Sam</h2>
     </div>
@@ -78,6 +83,20 @@
 .new-session{
 	margin-top: 80px;
   margin-right: 245px;
+}
+
+.toast{
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	top: 5%;
+	width: 100%;
+}
+
+.white-back{
+	text-align: center;
+	background-color: #F4F4F8;
+	padding: 5px;
 }
 
 .title-container {

@@ -19,7 +19,7 @@
 				</div>
 			</div>
 			<div @click="makeSession" class="button-container">
-				<h3 class="red-text" style="font-size: 30px;">Add Session</h3>
+				<h3 class="red-text button-text">Add Session</h3>
 			</div>
   	</div>
   	<div class="vertical-line">
@@ -224,7 +224,21 @@
 
 .button-container{
 	display: flex;
+	justify-content: space-between;
+  width: 25vw;
+  padding: 0 30px;
 	margin-left: 140px;
+}
+
+.button-text:hover{
+	color: #D03D3C;
+}
+
+.button-container h3{
+	text-align: center;
+	font-size: 20px;
+	margin: 0;
+	cursor: pointer;
 }
 
 </style>

@@ -1,5 +1,10 @@
 <template>
   <div style="display: flex;">
+  	<div v-if="toastVisible" class="toast">
+  		<div class="red-text tiny-text yellow-back">	
+  			Your changes have been saved
+  		</div>
+  	</div>
   	<div class="main-left-container">
   		<div class="top-left-container">
 				<div><router-link class="arrow" tag="div" to="/dashboard"></router-link></div>
@@ -19,8 +24,8 @@
 				</div>
 			</div>
 			<div class="button-container">
-				<h3 @click="editSession" class="red-text" style="font-size: 30px;">Edit Session</h3>
-				<h3 @click="destroySession" class="red-text" style="font-size: 30px;">Delete Session</h3>
+				<h3 @click="editSession" class="red-text button-text">Edit Session</h3>
+				<h3 @click="destroySession" class="red-text button-text">Delete Session</h3>
 			</div>
   	</div>
   	<div class="vertical-line">
@@ -68,6 +73,7 @@
 	    	stepForward,
 	    	sessionUrl: '',
 	    	stretches: [],
+	    	toastVisible: false,
 	    	availableStretches: [], 
 	    	constantStretches: [
 					{name: 'Forward Stretch', icon: forwardStretch, duration: '1'},
@@ -127,18 +133,21 @@
   			this.$http.put(this.sessionUrl, changedSession)
 	        .then(response => {
 	          console.log(response)
+	          this.showToast()
 	        }, error => {
 	          console.log(error)
         });
   		}, 
   		destroySession(){
-  			this.$http.delete(this.sessionUrl)
-	        .then(response => {
-	          console.log(response)
-	          this.$router.push({path: '/dashboard'})
-	        }, error => {
+  			if(confirm("Do you really want to delete?")){
+  				this.$http.delete(this.sessionUrl)
+		        .then(response => {
+		          console.log(response)
+		          this.$router.push({path: '/dashboard'})
+		        }, error => {
 	          console.log(error)
-        });
+        	});
+  			}
   			
   		},
   		determineDuration(){
@@ -148,6 +157,12 @@
   			}
   			console.log(sum)
   			return sum.toFixed(2)
+  		}, 
+  		showToast(){
+  			this.toastVisible = true
+  			setTimeout(()=> {
+  				this.toastVisible = false
+  			}, 2000)
   		}
   	}
 	}
@@ -159,6 +174,7 @@
 	background: url('../assets/arrow.svg') no-repeat top left;
 	height: 50px;
 	width: 50px;
+	cursor: pointer;
 }
 
 .arrow:hover {
@@ -174,6 +190,20 @@
 	width: 50px;
 	margin-right: 50px;
 	margin-bottom: 15px;
+}
+
+.toast{
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	top: 5%;
+	width: 100%;
+}
+
+.yellow-back{
+	text-align: center;
+	background-color: #FED766;
+	padding: 5px;
 }
 
 .ghost {
@@ -245,7 +275,21 @@
 
 .button-container{
 	display: flex;
+	justify-content: space-between;
+  width: 25vw;
+  padding: 0 30px;
 	margin-left: 140px;
+}
+
+.button-container h3{
+	text-align: center;
+	font-size: 20px;
+	margin: 0;
+	cursor: pointer;
+}
+
+.button-text:hover{
+	color: #D03D3C;
 }
 
 .added-stretches-container {
