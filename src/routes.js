@@ -6,7 +6,7 @@ import Timer from './components/Timer.vue'
 
 export const routes = [
 	{path: '', component: LandingPage },
-	{path: '/dashboard', component: Dashboard },
+	{path: '/dashboard', name: 'dashboard', component: Dashboard },
 	{path: '/newsession', component: NewSession, props: true },
 	{path: '/editsession/:id', component: EditSession, name: 'session-edit', props: true },
 	{path: '/timer', component: Timer, name: 'timer', props: true },

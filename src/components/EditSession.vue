@@ -143,7 +143,7 @@
   				this.$http.delete(this.sessionUrl)
 		        .then(response => {
 		          console.log(response)
-		          this.$router.push({path: '/dashboard'})
+		          this.$router.push({name: 'dashboard', params: {update: 'deleted'}})
 		        }, error => {
 	          console.log(error)
         	});

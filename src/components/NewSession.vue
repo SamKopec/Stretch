@@ -109,7 +109,7 @@
 	      this.$http.post('sessions.json', newSession)
 	        .then(response => {
 	          console.log(response)
-	          this.$router.push({path: '/dashboard'})
+	          this.$router.push({name: 'dashboard', params: {update: 'created'}})
 	        }, error => {
 	          console.log(error)
 	        });

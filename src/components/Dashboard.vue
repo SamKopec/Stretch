@@ -2,7 +2,7 @@
   <div>
   	<div v-if="toastVisible"  class="toast">
   		<div class="red-text tiny-text white-back">	
-  			Your changes have been saved
+  			{{ toastContent }}
   		</div>
   	</div>
 		<div class="push-right title-container">
@@ -53,14 +53,28 @@
 	    	singleLegForward,
 	    	stepForward,
 	    	sessions: [], 
+	    	toastVisible: false,
+	    	toastContent: '',
 	    }
 	  }, 
 	  components: {
 	      'app-circle': Circle,
 	  },
 	  methods: {
+	  	showToast(content){
+	  		this.toastContent = content
+  			this.toastVisible = true
+  			setTimeout(()=> {
+  				this.toastVisible = false
+  			}, 2000)
+  		}
 	  },
 	  created(){
+	  	if(this.$route.params.update === 'created'){
+				this.showToast('Your Session was created')
+  		} else if(this.$route.params.update === 'deleted'){
+	  		this.showToast('Your Session was deleted')	
+  		}
 			this.$http.get('sessions.json')
         .then(response => {
           return response.json()
