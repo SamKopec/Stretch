@@ -146,7 +146,8 @@
   			for(let stretch of this.stretches){
   				sum = sum + parseFloat(stretch.duration)
   			}
-  			return sum
+  			console.log(sum)
+  			return sum.toFixed(2)
   		}
   	}
 	}

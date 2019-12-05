@@ -119,7 +119,7 @@
   			for(let stretch of this.stretches){
   				sum = sum + parseFloat(stretch.duration)
   			}
-  			return sum
+  			return sum.toFixed(2)
   		}
   	}
 	}
