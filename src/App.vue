@@ -112,6 +112,51 @@
   .flex {  
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
+
+  .hover-red:hover {
+    cursor: pointer;
+    color: #D03D3C;
+  }
+
+  .hover-blue:hover {
+    cursor: pointer;
+    color: rgb(31,137,151);
+  }
+
+  .fade-enter{
+     opacity: 0;
+   }
+
+  .fade-enter-active{
+     transition: opacity 1s;
+   }
+
+  .fade-leave{
+     opacity: 1
+   }
+
+  .fade-leave-active{
+     transition: opacity 0s;
+     opacity: 0;
+   }
+
+   .fade-toast-enter{
+     opacity: 0;
+   }
+
+  .fade-toast-enter-active{
+     transition: opacity 0.5s;
+   }
+
+  .fade-toast-leave{
+     opacity: 1
+   }
+
+  .fade-toast-leave-active{
+     transition: opacity 0.5s;
+     opacity: 0;
+   }
 
 </style>

@@ -1,4 +1,5 @@
 <template>
+	<transition appear name="fade">
   <div style="display: flex;">
   	<div class="main-left-container">
   		<div class="top-left-container">
@@ -11,15 +12,17 @@
 						<div class="flex stretch-margin stretch-margin " style='height: 50px; align-items: center' v-for="(stretch, index) in stretches" :key="index">
 							<p class="tiny-text blue-text "> {{stretch.name}} </p>
 							<div class="flex">
-								<input type="text" class="stretch-input-red tiny-text" v-model="stretch.duration">
+								<input type="number" min="0" step="1" class="stretch-input-red tiny-text" v-model="stretch.minutes">
 								<p class="red-text tiny-text" style="padding-bottom:4px">min</p>
+								<input type="number" min="0" step="1" class="stretch-input-red tiny-text" v-model="stretch.seconds">
+								<p class="red-text tiny-text" style="padding-bottom:4px">sec</p>
 							</div>
 						</div>
 					</draggable>
 				</div>
 			</div>
 			<div @click="makeSession" class="button-container">
-				<h3 class="red-text button-text">Add Session</h3>
+				<h3 class="red-text hover-red">Add Session</h3>
 			</div>
   	</div>
   	<div class="vertical-line">
@@ -43,6 +46,7 @@
 			</div>
   	</div>
   </div>
+</transition>
 </template>
 
 <script>
@@ -58,6 +62,8 @@
 	  data () {
 	    return {
 	    	sessionName: '',
+	    	sessionMinutes: null,
+	    	sessionSeconds: null,
 	    	forwardStretch,
 	    	forwardBend,
 	    	butterfly,
@@ -68,13 +74,13 @@
 	    	stretches: [],
 	    	availableStretches: [], 
 	    	constantStretches: [
-					{name: 'Forward Stretch', icon: forwardStretch, duration: '1'},
-					{name: 'Forward Bend', icon: forwardBend, duration: '1'},
-					{name: 'Butterfly', icon: butterfly, duration: '1'},
-					{name: 'Leg Raise', icon: legRaise, duration: '1'},
-					{name: 'Lunge', icon: lunge, duration: '1'},
-					{name: 'Single Leg Forward', icon: singleLegForward, duration: '1'},
-					{name: 'Step Forward', icon: stepForward, duration: '1'}
+					{name: 'Forward Stretch', icon: forwardStretch, minutes: '1', seconds: '0'},
+					{name: 'Forward Bend', icon: forwardBend, minutes: '1', seconds: '0'},
+					{name: 'Butterfly', icon: butterfly, minutes: '1', seconds: '0'},
+					{name: 'Leg Raise', icon: legRaise, minutes: '1', seconds: '0'},
+					{name: 'Lunge', icon: lunge, minutes: '1', seconds: '0'},
+					{name: 'Single Leg Forward', icon: singleLegForward, minutes: '1', seconds: '0'},
+					{name: 'Step Forward', icon: stepForward, minutes: '1', seconds: '0'}
 				],
 	    }
 	  }, 
@@ -101,26 +107,50 @@
   	},
   	methods: {
   		makeSession(){
+  			this.determineDuration()
+  			this.filterOutEmpties()
   			let newSession = {
   				name: this.sessionName,
-  				duration: this.determineDuration(),
+  				minutes: this.sessionMinutes,
+  				seconds: this.sessionSeconds,
   				stretches: this.stretches
   			}
-	      this.$http.post('sessions.json', newSession)
+  			if(newSession.stretches.length >= 1){
+  				 this.$http.post('sessions.json', newSession)
 	        .then(response => {
 	          console.log(response)
 	          this.$router.push({name: 'dashboard', params: {update: 'created'}})
 	        }, error => {
 	          console.log(error)
 	        });
+  			} else {
+  				console.log("Add some stretches to your session")
+  			}
   		},
   		determineDuration(){
-  			let sum = 0
+  			let minutes = 0
+  			let seconds = 0
   			for(let stretch of this.stretches){
-  				sum = sum + parseFloat(stretch.duration)
+  				if (stretch.minutes === '' || parseInt(stretch.minutes) <= 0){
+  					stretch.minutes = 0
+  				}
+  				if (stretch.seconds === '' || parseInt(stretch.seconds) <= 0){
+  					stretch.seconds = 0
+  				}		
+  				minutes = minutes + parseInt(stretch.minutes)
+  				seconds = seconds + parseInt(stretch.seconds)
   			}
-  			return sum.toFixed(2)
-  		}
+  			const extraMin = parseInt(seconds/60)
+  			if(extraMin >= 1){
+  				minutes = minutes + extraMin
+  				seconds = seconds - (60 * extraMin)
+  			}
+  			this.sessionMinutes = minutes
+  			this.sessionSeconds = seconds
+  		},
+  		filterOutEmpties(){
+				this.stretches = this.stretches.filter(stretch => !(parseInt(stretch.seconds) === 0 && parseInt(stretch.minutes) === 0))
+  		},
   	}
 	}
 </script>
@@ -228,10 +258,6 @@
   width: 25vw;
   padding: 0 30px;
 	margin-left: 140px;
-}
-
-.button-text:hover{
-	color: #D03D3C;
 }
 
 .button-container h3{

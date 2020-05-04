@@ -4,7 +4,7 @@
       <div><router-link class="arrow-red-modal" tag="div" to="/dashboard"></router-link></div>
     </div>
     <div class="next-up-text">
-      <h2 class="biggish-text red-text">Next up: Calf Stretch</h2>
+      <h2 class="biggish-text red-text">Next up: {{stretch}}</h2>
     </div>
     <div class="circle-countdown-container">  
       <div class="countdown blue-text" style="font-size: 288px">
@@ -19,7 +19,8 @@
   export default {
     name: 'app',
     props: {
-      num: Number
+      num: Number, 
+      stretch: String
     },
     data () {
       return {
@@ -53,6 +54,11 @@
     height: 50px;
     width: 50px;
     margin-left: 8px;
+  }
+
+  .arrow-red-modal:hover {
+    background: url('../assets/red-arrow-hover.svg') no-repeat top left;
+    cursor: pointer;
   }
 
   .circle-countdown-container {

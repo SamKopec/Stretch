@@ -1,20 +1,32 @@
 <template>
-  <div>
-      <div class="flex top-bar">
-        <div><router-link class="arrow-red" tag="div" to="/dashboard"></router-link></div>
-        <div :class="determineIcon()" v-if="!waiting" @click="pauseTimer"></div>
-      </div>
-      <div class="image-stretch">
-        <img :src="session[currentIndex].icon"></img>
-      </div>
-      <h2 class="biggish-text blue-text stretch-name">{{session[currentIndex].name}}</h2>
-      <div class="timer-container">
-        <h1 class="timer blue-text">{{clock}}</h1>
-      </div>
-      <!-- <div v-if="waiting" class="modal">{{num}}</div> -->
-      <app-rest v-if="waiting" :num="num"></app-rest>
-      <app-circle  class="move-it"></app-circle>
-  </div>
+  <transition appear name="fade">
+    <div>
+        <div class="flex top-bar">
+          <div><router-link class="arrow-red" tag="div" to="/dashboard"></router-link></div>
+          <div class="flex"> 
+            <div style="margin: 10px 0;"> 
+              <input type="checkbox" id="checkbox" v-model="setWaitingTimer">
+              <label for="checkbox">Use Rest Timer</label>
+            </div>
+            <div :class="determineIcon()" v-if="!waiting" @click="pauseTimer"></div>
+          </div>
+        </div>
+        <div class="image-stretch">
+          <img :src="session[currentIndex].icon"></img>
+        </div>
+        <h2 class="biggish-text blue-text stretch-name">{{session[currentIndex].name}}</h2>
+        <div class="timer-container">
+          <h1 class="timer blue-text">{{clock}}</h1>
+        </div>
+        <div class="timer-container">
+          <h3 @click="nextStretch" class="red-text hover-red">  
+            Next Stretch
+          </h3>
+        </div>
+        <app-rest v-if="waiting" :num="num" :stretch="session[currentIndex].name"></app-rest>
+        <app-circle  class="move-it"></app-circle>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -27,6 +39,8 @@
         clock: '',
         bestTime: '',
         timerStarted: false, 
+        restTimerStarted: false,
+        setWaitingTimer: true,
         timer: '',
         restTimer: '',
         currentIndex: 0,
@@ -65,9 +79,8 @@
       },
       setTimer(){
         if(this.session[this.currentIndex]){
-          let minute = Math.floor(this.session[this.currentIndex].duration)
-          let decimal = (this.session[this.currentIndex].duration-minute).toFixed(2)
-          let seconds = Math.round(60 * decimal)
+          let minute = parseInt(this.session[this.currentIndex].minutes)
+          let seconds = parseInt(this.session[this.currentIndex].seconds)
           this.bestTime = (minute * 60) + seconds
           this.convertTime()
         } else {
@@ -75,6 +88,7 @@
         }
       },
       pauseTimer(){
+        clearInterval(this.restTimer)
         if(this.timerStarted){ 
           this.timerStarted = false,
           clearInterval(this.timer);
@@ -91,6 +105,8 @@
       },
       playNoise(){
         this.audioRest.play();
+      },
+      setupWaitingTimer(){
         if(this.currentIndex < this.sessionAmount){
           this.waiting = true
           setTimeout(()=> {
@@ -101,16 +117,33 @@
       },
       image(){
         return `url(${forwardStretch})`
+      },
+      spacePause(event){
+        event.preventDefault()
+        if (!this.restTimerStarted){
+          if(event.code === "Space"){
+            console.log("Clicked space!")
+            this.pauseTimer()
+          }
+        }   
+      },
+      nextStretch(){
+        clearInterval(this.timer);
+        this.timerStarted = false
+        this.currentIndex = this.currentIndex + 1
+        this.setTimer()
+        if(this.setWaitingTimer){
+          this.playNoise()
+          this.setupWaitingTimer()
+        } else {
+          this.startTimer()
+        }
       }
     },
     watch: {
       bestTime: function(value){
         if(value === 0){
-          clearInterval(this.timer);
-          this.timerStarted = false
-          this.currentIndex = this.currentIndex + 1
-          this.setTimer()
-          this.playNoise()
+          this.nextStretch()
         }
       }, 
       currentIndex: function(value){
@@ -124,27 +157,33 @@
         }
       },
       waiting: function(value){
-        this.num = 5
-        if(value){
-          this.restTimer = setInterval(() => {
-            if(this.num > 0){
-              console.log(this.num)
-              this.num --
-            } else {
-              this.num = 5
-              clearInterval(this.restTimer)
-            }
-          }, 1000)
-        } 
+        if(!this.restTimerStarted){
+          this.num = 5
+          this.restTimerStarted = true
+          if(value){
+            this.restTimer = setInterval(() => {
+              if(this.num > 0){
+                console.log(this.num)
+                this.num --
+              } else {
+                this.num = 5
+                this.restTimerStarted = false
+                clearInterval(this.restTimer)
+              }
+            }, 1000)
+          } 
+        }
       }
     },
     created(){
+      window.addEventListener('keyup', this.spacePause)
       this.sessionAmount = this.session.length
       this.setTimer()
     }, 
     destroyed(){
       clearInterval(this.timer)
       clearInterval(this.restTimer)
+      this.timerStarted = true
     }
   }
 </script>
@@ -155,6 +194,11 @@
   background: url('../assets/red-arrow.svg') no-repeat top left;
   height: 50px;
   width: 50px;
+}
+
+.arrow-red:hover{
+  background: url('../assets/red-arrow-hover.svg') no-repeat top left;
+  cursor: pointer;
 }
 
 .top-bar{
@@ -174,12 +218,24 @@
   background: url('../assets/pause.svg') no-repeat top left;
   height: 50px;
   width: 50px;
+  margin-left: 30px;
+}
+
+.pause:hover {
+  background: url('../assets/pause-hover.svg') no-repeat top left;
+  cursor: pointer;
 }
 
 .play {
   background: url('../assets/play.svg') no-repeat top left;
   height: 50px;
   width: 50px;
+  margin-left: 30px;
+}
+
+.play:hover {
+  background: url('../assets/play-hover.svg') no-repeat top left;
+  cursor: pointer;
 }
 
 .image-stretch {
@@ -214,7 +270,7 @@
 }
 
 .timer {
-  font-size: 265px;
+  font-size: 230px;
   margin: 0;
 }
 
