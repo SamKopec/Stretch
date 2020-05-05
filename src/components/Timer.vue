@@ -1,212 +1,229 @@
 <template>
   <transition appear name="fade">
     <div>
-        <div class="flex top-bar">
-          <div><router-link class="arrow-red" tag="div" to="/dashboard"></router-link></div>
-          <div class="flex"> 
-            <div style="margin: 10px 0;"> 
-              <input type="checkbox" id="checkbox" v-model="setWaitingTimer">
-              <label for="checkbox">Use Rest Timer</label>
-            </div>
-            <div :class="determineIcon()" v-if="!waiting" @click="pauseTimer"></div>
+      <div class="flex top-bar">
+        <div>
+          <router-link class="arrow-red" tag="div" to="/dashboard">
+          </router-link>
+        </div>
+        <div class="flex">
+          <div style="margin: 10px 0;">
+            <input id="checkbox" v-model="setWaitingTimer" type="checkbox" />
+            <label for="checkbox">Use Rest Timer</label>
           </div>
+          <div
+            v-if="!waiting"
+            :class="determineIcon()"
+            @click="pauseTimer"
+          ></div>
         </div>
-        <div class="image-stretch">
-          <img :src="session[currentIndex].icon"></img>
-        </div>
-        <h2 class="biggish-text blue-text stretch-name">{{session[currentIndex].name}}</h2>
-        <div class="timer-container">
-          <h1 class="timer blue-text">{{clock}}</h1>
-        </div>
-        <div class="timer-container">
-          <h3 @click="nextStretch" class="red-text hover-red">  
-            Next Stretch
-          </h3>
-        </div>
-        <app-rest v-if="waiting" :num="num" :stretch="session[currentIndex].name"></app-rest>
-        <app-circle  class="move-it"></app-circle>
+      </div>
+      <div class="image-stretch">
+        <img :src="getImgUrl(session[currentIndex].icon)" />
+      </div>
+      <h2 class="biggish-text blue-text stretch-name">
+        {{ session[currentIndex].name }}
+      </h2>
+      <div class="timer-container">
+        <h1 class="timer blue-text">{{ clock }}</h1>
+      </div>
+      <div class="timer-container">
+        <h3 @click="nextStretch" class="red-text hover-red">
+          Next Stretch
+        </h3>
+      </div>
+      <app-rest
+        v-if="waiting"
+        :num="num"
+        :stretch="session[currentIndex].name"
+      ></app-rest>
+      <app-circle class="move-it"></app-circle>
     </div>
   </transition>
 </template>
 
 <script>
-  import Circle from './Circle.vue'
-  import Rest from './Rest.vue'
-  export default {
-    data () {
-      return {
-        session: this.$route.params.session.stretches,
-        clock: '',
-        bestTime: '',
-        timerStarted: false, 
-        restTimerStarted: false,
-        setWaitingTimer: true,
-        timer: '',
-        restTimer: '',
-        currentIndex: 0,
-        sessionAmount: '',
-        audioStart: new Audio('http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3'),
-        audioRest: new Audio('http://soundbible.com/mp3/Air%20Plane%20Ding-SoundBible.com-496729130.mp3'),
-        audioEnd: new Audio('http://soundbible.com/mp3/party_horn-Mike_Koenig-76599891.mp3'),
-        waiting: false,
-        num: 5
-      }
-    }, 
-    components: {
-        'app-circle': Circle,
-        'app-rest': Rest
+import Circle from "./Circle.vue";
+import Rest from "./Rest.vue";
+export default {
+  data() {
+    console.log(this.$route.params.session.stretches);
+    return {
+      session: this.$route.params.session.stretches,
+      clock: "",
+      bestTime: "",
+      timerStarted: false,
+      restTimerStarted: false,
+      setWaitingTimer: true,
+      timer: "",
+      restTimer: "",
+      currentIndex: 0,
+      sessionAmount: "",
+      audioStart: new Audio(
+        "http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3"
+      ),
+      audioRest: new Audio(
+        "http://soundbible.com/mp3/Air%20Plane%20Ding-SoundBible.com-496729130.mp3"
+      ),
+      audioEnd: new Audio(
+        "http://soundbible.com/mp3/party_horn-Mike_Koenig-76599891.mp3"
+      ),
+      waiting: false,
+      num: 5
+    };
+  },
+  components: {
+    "app-circle": Circle,
+    "app-rest": Rest
+  },
+  methods: {
+    getImgUrl(pic) {
+      return require("../assets/Icons/" + pic);
     },
-    methods: {
-      startTimer(){
-        if(!this.timerStarted){
-          console.log("timer started")
-          this.audioStart.play();
-          this.timer = setInterval(()=>{
-            this.bestTime = this.bestTime - 1
-            this.convertTime()
-          }, 1000)
-          this.timerStarted = true
-        } 
-      },
-      convertTime(){
-        let minutes = Math.floor(this.bestTime/60)
-        let minutesInSeconds = minutes * 60
-        let seconds = this.bestTime - minutesInSeconds
-        if(seconds < 10){
-          seconds = '0' + seconds
-        }
-        this.clock = minutes + ":" + seconds
-      },
-      setTimer(){
-        if(this.session[this.currentIndex]){
-          let minute = parseInt(this.session[this.currentIndex].minutes)
-          let seconds = parseInt(this.session[this.currentIndex].seconds)
-          this.bestTime = (minute * 60) + seconds
-          this.convertTime()
-        } else {
-          this.clock = '0:00'
-        }
-      },
-      pauseTimer(){
-        clearInterval(this.restTimer)
-        if(this.timerStarted){ 
-          this.timerStarted = false,
-          clearInterval(this.timer);
-        } else {
-          this.startTimer()
-        }
-      },
-      determineIcon(){
-        if(this.timerStarted){
-          return 'pause'
-        } else {
-          return 'play'
-        }
-      },
-      playNoise(){
-        this.audioRest.play();
-      },
-      setupWaitingTimer(){
-        if(this.currentIndex < this.sessionAmount){
-          this.waiting = true
-          setTimeout(()=> {
-            this.waiting = false
-            this.startTimer()
-          }, 5000)
-        }
-      },
-      image(){
-        return `url(${forwardStretch})`
-      },
-      spacePause(event){
-        event.preventDefault()
-        if (!this.restTimerStarted){
-          if(event.code === "Space"){
-            console.log("Clicked space!")
-            this.pauseTimer()
-          }
-        }   
-      },
-      nextStretch(){
-        clearInterval(this.timer);
-        this.timerStarted = false
-        this.currentIndex = this.currentIndex + 1
-        this.setTimer()
-        if(this.setWaitingTimer){
-          this.playNoise()
-          this.setupWaitingTimer()
-        } else {
-          this.startTimer()
+    startTimer() {
+      if (!this.timerStarted) {
+        console.log("timer started");
+        this.audioStart.play();
+        this.timer = setInterval(() => {
+          this.bestTime = this.bestTime - 1;
+          this.convertTime();
+        }, 1000);
+        this.timerStarted = true;
+      }
+    },
+    convertTime() {
+      let minutes = Math.floor(this.bestTime / 60);
+      let minutesInSeconds = minutes * 60;
+      let seconds = this.bestTime - minutesInSeconds;
+      if (seconds < 10) {
+        seconds = "0" + seconds;
+      }
+      this.clock = minutes + ":" + seconds;
+    },
+    setTimer() {
+      if (this.session[this.currentIndex]) {
+        let minute = parseInt(this.session[this.currentIndex].minutes);
+        let seconds = parseInt(this.session[this.currentIndex].seconds);
+        this.bestTime = minute * 60 + seconds;
+        this.convertTime();
+      } else {
+        this.clock = "0:00";
+      }
+    },
+    pauseTimer() {
+      clearInterval(this.restTimer);
+      if (this.timerStarted) {
+        (this.timerStarted = false), clearInterval(this.timer);
+      } else {
+        this.startTimer();
+      }
+    },
+    determineIcon() {
+      if (this.timerStarted) {
+        return "pause";
+      } else {
+        return "play";
+      }
+    },
+    playNoise() {
+      this.audioRest.play();
+    },
+    setupWaitingTimer() {
+      if (this.currentIndex < this.sessionAmount) {
+        this.waiting = true;
+        setTimeout(() => {
+          this.waiting = false;
+          this.startTimer();
+        }, 5000);
+      }
+    },
+    spacePause(event) {
+      event.preventDefault();
+      if (!this.restTimerStarted) {
+        if (event.code === "Space") {
+          console.log("Clicked space!");
+          this.pauseTimer();
         }
       }
     },
-    watch: {
-      bestTime: function(value){
-        if(value === 0){
-          this.nextStretch()
-        }
-      }, 
-      currentIndex: function(value){
-        if(value >= this.sessionAmount){
-          this.currentIndex = 0
-          this.clock = '0:00'
-          this.timerStarted = false
-          this.audioEnd.play()
-          clearInterval(this.timer);
-          this.setTimer()
-        }
-      },
-      waiting: function(value){
-        if(!this.restTimerStarted){
-          this.num = 5
-          this.restTimerStarted = true
-          if(value){
-            this.restTimer = setInterval(() => {
-              if(this.num > 0){
-                console.log(this.num)
-                this.num --
-              } else {
-                this.num = 5
-                this.restTimerStarted = false
-                clearInterval(this.restTimer)
-              }
-            }, 1000)
-          } 
-        }
+    nextStretch() {
+      clearInterval(this.timer);
+      this.timerStarted = false;
+      this.currentIndex = this.currentIndex + 1;
+      this.setTimer();
+      if (this.setWaitingTimer) {
+        this.playNoise();
+        this.setupWaitingTimer();
+      } else {
+        this.startTimer();
       }
-    },
-    created(){
-      window.addEventListener('keyup', this.spacePause)
-      this.sessionAmount = this.session.length
-      this.setTimer()
-    }, 
-    destroyed(){
-      clearInterval(this.timer)
-      clearInterval(this.restTimer)
-      this.timerStarted = true
     }
+  },
+  watch: {
+    bestTime: function (value) {
+      if (value === 0) {
+        this.nextStretch();
+      }
+    },
+    currentIndex: function (value) {
+      if (value >= this.sessionAmount) {
+        this.currentIndex = 0;
+        this.clock = "0:00";
+        this.timerStarted = false;
+        this.audioEnd.play();
+        clearInterval(this.timer);
+        this.setTimer();
+      }
+    },
+    waiting: function (value) {
+      if (!this.restTimerStarted) {
+        this.num = 5;
+        this.restTimerStarted = true;
+        if (value) {
+          this.restTimer = setInterval(() => {
+            if (this.num > 0) {
+              console.log(this.num);
+              this.num--;
+            } else {
+              this.num = 5;
+              this.restTimerStarted = false;
+              clearInterval(this.restTimer);
+            }
+          }, 1000);
+        }
+      }
+    }
+  },
+  created() {
+    window.addEventListener("keyup", this.spacePause);
+    this.sessionAmount = this.session.length;
+    this.setTimer();
+  },
+  destroyed() {
+    clearInterval(this.timer);
+    clearInterval(this.restTimer);
+    this.timerStarted = true;
   }
+};
 </script>
 
 <style>
-
-.arrow-red{
-  background: url('../assets/red-arrow.svg') no-repeat top left;
+.arrow-red {
+  background: url("../assets/red-arrow.svg") no-repeat top left;
   height: 50px;
   width: 50px;
 }
 
-.arrow-red:hover{
-  background: url('../assets/red-arrow-hover.svg') no-repeat top left;
+.arrow-red:hover {
+  background: url("../assets/red-arrow-hover.svg") no-repeat top left;
   cursor: pointer;
 }
 
-.top-bar{
+.top-bar {
   margin: 20px 20px 0 20px;
-
 }
 
-.move-it{
+.move-it {
   position: fixed;
   transform: rotate(-226.29deg);
   z-index: -1;
@@ -215,26 +232,26 @@
 }
 
 .pause {
-  background: url('../assets/pause.svg') no-repeat top left;
+  background: url("../assets/pause.svg") no-repeat top left;
   height: 50px;
   width: 50px;
   margin-left: 30px;
 }
 
 .pause:hover {
-  background: url('../assets/pause-hover.svg') no-repeat top left;
+  background: url("../assets/pause-hover.svg") no-repeat top left;
   cursor: pointer;
 }
 
 .play {
-  background: url('../assets/play.svg') no-repeat top left;
+  background: url("../assets/play.svg") no-repeat top left;
   height: 50px;
   width: 50px;
   margin-left: 30px;
 }
 
 .play:hover {
-  background: url('../assets/play-hover.svg') no-repeat top left;
+  background: url("../assets/play-hover.svg") no-repeat top left;
   cursor: pointer;
 }
 
@@ -264,7 +281,7 @@
   text-align: center;
 }
 
-.timer-container{
+.timer-container {
   display: flex;
   justify-content: center;
 }
@@ -273,5 +290,4 @@
   font-size: 230px;
   margin: 0;
 }
-
 </style>

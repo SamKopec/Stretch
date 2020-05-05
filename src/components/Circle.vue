@@ -10,18 +10,16 @@
 
 <script>
 export default {
-  data () {
-    return {
-    }
-  }
-}
+  data() {
+    return {};
+  },
+};
 </script>
 
 <style scoped>
-
 .yellow-circle {
   position: fixed;
-  background-color: #FED766;
+  background-color: #fed766;
   z-index: -1;
   border-radius: 100%;
   right: -300px;
@@ -37,7 +35,7 @@ export default {
 }
 
 .circle-2 {
-/*  width: 1030px;
+  /*  width: 1030px;
   height: 1030px;
   opacity: 65%;*/
   width: 1600px;
@@ -46,7 +44,7 @@ export default {
 }
 
 .circle-3 {
-/*  width: 1080px;
+  /*  width: 1080px;
   height: 1080px;
   opacity: 50%;*/
   width: 1645px;
@@ -65,5 +63,4 @@ export default {
   height: 1827px;
   opacity: 5%;
 }
-
 </style>
