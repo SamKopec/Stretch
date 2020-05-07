@@ -364,7 +364,7 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	width: 25vw;
-	padding: 0 30px;
+	padding: 30px;
 	margin-left: 140px;
 }
 
