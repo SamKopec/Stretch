@@ -113,6 +113,12 @@ input:focus {
   align-items: center;
 }
 
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .hover-red:hover {
   cursor: pointer;
   color: #d03d3c;

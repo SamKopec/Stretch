@@ -114,7 +114,6 @@ export default {
 					dataArray.push(session);
 				}
 				this.sessions = dataArray;
-				console.log("sessions", dataArray);
 			});
 	}
 };

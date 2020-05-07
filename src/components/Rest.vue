@@ -13,8 +13,8 @@
 			<h2 class="biggish-text red-text">Next up: {{ stretch }}</h2>
 		</div>
 		<div class="circle-countdown-container">
-			<div class="countdown blue-text" style="font-size: 288px;">
-				{{ num }}
+			<div class="countdown flex-center blue-text" style="font-size: 288px;">
+				<p class="inner-circle-text">{{ num }}</p>
 			</div>
 		</div>
 	</div>
@@ -66,11 +66,14 @@ export default {
 	justify-content: center;
 }
 
+.inner-circle-text {
+	line-height: 288px;
+}
+
 .countdown {
 	background-color: #fed766;
 	width: 400px;
 	height: 400px;
-	text-align: center;
 	margin-top: 80px;
 	border-radius: 1000px;
 }

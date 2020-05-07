@@ -30,21 +30,21 @@
 								<p class="tiny-text blue-text">{{ stretch.name }}</p>
 								<div class="flex">
 									<input
-										type="number"
-										min="0"
-										step="1"
+										type="text"
+										maxlength="2"
 										class="stretch-input-red tiny-text"
 										v-model="stretch.minutes"
+										@keypress="isInteger"
 									/>
 									<p class="red-text tiny-text" style="padding-bottom: 4px;">
 										min
 									</p>
 									<input
-										type="number"
-										min="0"
-										step="1"
+										type="text"
+										maxlength="2"
 										class="stretch-input-red tiny-text"
 										v-model="stretch.seconds"
+										@keypress="isInteger"
 									/>
 									<p class="red-text tiny-text" style="padding-bottom: 4px;">
 										sec
@@ -69,7 +69,6 @@
 						type="text"
 						class="stretch-input blue-text small-text"
 						style="visibility: hidden;"
-						:value="''"
 					/>
 				</div>
 				<div class="added-stretches-container">
@@ -82,8 +81,8 @@
 						>
 							<div
 								class="stretch-container"
-								v-for="stretch in availableStretches"
-								v-bind:key="stretch.name"
+								v-for="(stretch, index) in availableStretches"
+								v-bind:key="`${stretch.name}-${index}`"
 							>
 								<img :src="getImgUrl(stretch.icon)" class="stretch-icon" />
 								<div class="name-stretch stretch-margin">
@@ -145,6 +144,30 @@ export default {
 					icon: "StepForwardFull.svg",
 					minutes: "1",
 					seconds: "0"
+				},
+				{
+					name: "Calf Stretch",
+					icon: "CalfStretchFull.svg",
+					minutes: "1",
+					seconds: "0"
+				},
+				{
+					name: "Quad Stretch",
+					icon: "QuadStretchFull.svg",
+					minutes: "1",
+					seconds: "0"
+				},
+				{
+					name: "Overhead Stretch",
+					icon: "OverHeadStretch.svg",
+					minutes: "1",
+					seconds: "0"
+				},
+				{
+					name: "Cross Arm Stretch",
+					icon: "CrossArmFull.svg",
+					minutes: "1",
+					seconds: "0"
 				}
 			]
 		};
@@ -201,6 +224,8 @@ export default {
 			let minutes = 0;
 			let seconds = 0;
 			for (let stretch of this.stretches) {
+				stretch.minutes = stretch.minutes * 1;
+				stretch.seconds = stretch.seconds * 1;
 				if (stretch.minutes === "" || parseInt(stretch.minutes) <= 0) {
 					stretch.minutes = 0;
 				}
@@ -226,6 +251,14 @@ export default {
 		},
 		getImgUrl(pic) {
 			return require("../assets/Icons/" + pic);
+		},
+		isInteger(event) {
+			let numberArray = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+			if (!numberArray.includes(event.key)) {
+				event.preventDefault();
+			} else {
+				return true;
+			}
 		}
 	}
 };

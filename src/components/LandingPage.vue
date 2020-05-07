@@ -22,26 +22,25 @@ export default {
   name: "app",
   data() {
     return {
-      second: false,
+      second: false
     };
   },
   components: {
-    "app-circle": Circle,
+    "app-circle": Circle
   },
   created() {
     setTimeout(() => {
       this.second = true;
-      console.log(this.second);
     }, 1000);
   },
   methods: {
     toDash() {
       this.$router.push({
         name: "dashboard",
-        params: { update: "fromLanding" },
+        params: { update: "fromLanding" }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

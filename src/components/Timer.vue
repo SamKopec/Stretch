@@ -9,7 +9,7 @@
         <div class="flex">
           <div style="margin: 10px 0;">
             <input id="checkbox" v-model="setWaitingTimer" type="checkbox" />
-            <label for="checkbox">Use Rest Timer</label>
+            <label for="checkbox" class="checkbox-label">Use Rest Timer</label>
           </div>
           <div
             v-if="!waiting"
@@ -47,7 +47,6 @@ import Circle from "./Circle.vue";
 import Rest from "./Rest.vue";
 export default {
   data() {
-    console.log(this.$route.params.session.stretches);
     return {
       session: this.$route.params.session.stretches,
       clock: "",
@@ -82,7 +81,6 @@ export default {
     },
     startTimer() {
       if (!this.timerStarted) {
-        console.log("timer started");
         this.audioStart.play();
         this.timer = setInterval(() => {
           this.bestTime = this.bestTime - 1;
@@ -125,7 +123,7 @@ export default {
         return "play";
       }
     },
-    playNoise() {
+    playRestNoise() {
       this.audioRest.play();
     },
     setupWaitingTimer() {
@@ -141,7 +139,6 @@ export default {
       event.preventDefault();
       if (!this.restTimerStarted) {
         if (event.code === "Space") {
-          console.log("Clicked space!");
           this.pauseTimer();
         }
       }
@@ -152,7 +149,7 @@ export default {
       this.currentIndex = this.currentIndex + 1;
       this.setTimer();
       if (this.setWaitingTimer) {
-        this.playNoise();
+        this.playRestNoise();
         this.setupWaitingTimer();
       } else {
         this.startTimer();
@@ -182,7 +179,6 @@ export default {
         if (value) {
           this.restTimer = setInterval(() => {
             if (this.num > 0) {
-              console.log(this.num);
               this.num--;
             } else {
               this.num = 5;
@@ -200,6 +196,7 @@ export default {
     this.setTimer();
   },
   destroyed() {
+    window.removeEventListener("keyup", this.spacePause);
     clearInterval(this.timer);
     clearInterval(this.restTimer);
     this.timerStarted = true;
@@ -267,6 +264,10 @@ export default {
 .stretch-name {
   text-align: center;
   cursor: pointer;
+}
+
+.checkbox-label {
+  margin-left: 10px;
 }
 
 .modal {
