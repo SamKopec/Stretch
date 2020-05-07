@@ -15,6 +15,7 @@
 					</div>
 					<input
 						type="text"
+						maxlength="14"
 						placeholder="Session Name Here"
 						class="stretch-input blue-text small-text"
 						v-model="sessionName"
