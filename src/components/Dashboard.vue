@@ -9,7 +9,7 @@
 		</transition>
 		<transition v-if="headerVisible" appear name="fade">
 			<div class="title-container">
-				<h2 class="biggish-text blue-text">Welcome, SamanthaKopec</h2>
+				<h2 class="biggish-text blue-text">Welcome, Sam</h2>
 			</div>
 		</transition>
 
@@ -201,50 +201,8 @@ export default {
 }
 
 @media screen and (min-width: 850px) {
-	.new-session {
-		margin-top: 80px;
-		margin-right: 245px;
-		justify-content: flex-end;
-	}
-
-	.toast {
-		position: absolute;
-		display: flex;
-		justify-content: center;
-		top: 5%;
-		width: 100%;
-	}
-
-	.white-back {
-		text-align: center;
-		background-color: #f4f4f8;
-		padding: 5px;
-	}
-
-	.title-container {
-		margin-top: 80px;
-		margin-right: 120px;
-		display: flex;
-		justify-content: flex-end;
-	}
-
 	.session-container {
-		width: 55%;
-		max-height: 190px;
 		min-width: 370px;
-	}
-
-	.session-label {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-top: 80px;
-		margin-left: 240px;
-		margin-right: 120px;
-	}
-
-	.edit {
-		margin-left: 15px;
 	}
 }
 
