@@ -59,11 +59,9 @@
 					<h3 class="red-text hover-red">Add Session</h3>
 				</div>
 			</div>
-			<div class="vertical-line">
-				<div class="explanation tiny-text blue-text">
-					Drag Stretches Here to Add
-				</div>
-			</div>
+			<p class="vertical-divide tiny-text blue-text">
+				Drag Stretches Here to Add
+			</p>
 			<div class="main-left-container">
 				<div class="top-left-container">
 					<input
@@ -72,7 +70,7 @@
 						style="visibility: hidden;"
 					/>
 				</div>
-				<div class="added-stretches-container">
+				<div class="existing-stretches-container">
 					<div>
 						<draggable
 							class="visible"
@@ -266,6 +264,14 @@ export default {
 </script>
 
 <style>
+.vertical-divide {
+	writing-mode: vertical-rl;
+	margin: 0px;
+	border-right: 3px dashed #c3dde3;
+	height: 100%;
+	text-align: center;
+}
+
 .arrow {
 	background: url("../assets/arrow.svg") no-repeat top left;
 	height: 50px;
@@ -297,15 +303,15 @@ export default {
 
 .main-left-container {
 	width: 50%;
-	display: flex;
-	flex-direction: column;
 	height: 100vh;
 	margin-top: 30px;
 	margin-left: 20px;
+	margin-right: 20px;
 }
 
 .top-left-container {
 	display: flex;
+	height: 50px;
 }
 
 .stretch-input {
@@ -341,24 +347,12 @@ export default {
 	align-items: center;
 }
 
-.vertical-line {
-	height: 100vh;
-	border-left: 3px dashed #c3dde3;
-	margin-left: 50px;
-}
-
-.explanation {
-	position: absolute;
-	transform: rotate(90deg);
-	top: 50%;
-	left: 40%;
-}
-
 .added-stretches-container {
-	align-items: center;
-	display: flex;
-	flex-grow: 0.4;
 	margin-left: 140px;
+}
+
+.existing-stretches-container {
+	margin-left: 40px;
 }
 
 .button-container {
