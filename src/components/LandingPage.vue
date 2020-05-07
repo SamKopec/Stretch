@@ -44,9 +44,4 @@ export default {
 };
 </script>
 
-<style>
-.title-container {
-  margin-top: 80px;
-  margin-right: 120px;
-}
-</style>
+<style></style>

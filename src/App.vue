@@ -15,7 +15,9 @@ export default {
 <style>
 body {
   background-color: #e6e6ea;
+  margin: 0;
   font-family: "IBM Plex Mono", monospace;
+  min-width: 300px;
 }
 
 h2,
@@ -75,23 +77,89 @@ input:focus {
 }
 
 .big-text {
-  font-size: 96px;
+  font-size: 15px;
 }
 
 .biggish-text {
-  font-size: 72px;
+  font-size: 34px;
 }
 
 .medium-text {
-  font-size: 48px;
+  font-size: 34px;
 }
 
 .small-text {
-  font-size: 36px;
+  font-size: 20px;
 }
 
 .tiny-text {
-  font-size: 20px;
+  font-size: 15px;
+}
+
+@media screen and (min-width: 850px) {
+  .big-text {
+    font-size: 96px;
+  }
+
+  .biggish-text {
+    font-size: 47px;
+  }
+
+  .medium-text {
+    font-size: 30px;
+  }
+
+  .small-text {
+    font-size: 23px;
+  }
+
+  .tiny-text {
+    font-size: 20px;
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .big-text {
+    font-size: 96px;
+  }
+
+  .biggish-text {
+    font-size: 72px;
+  }
+
+  .medium-text {
+    font-size: 48px;
+  }
+
+  .small-text {
+    font-size: 36px;
+  }
+
+  .tiny-text {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .big-text {
+    font-size: 15px;
+  }
+
+  .biggish-text {
+    font-size: 20px;
+  }
+
+  .medium-text {
+    font-size: 17px;
+  }
+
+  .small-text {
+    font-size: 15px;
+  }
+
+  .tiny-text {
+    font-size: 15px;
+  }
 }
 
 .blue-text {
