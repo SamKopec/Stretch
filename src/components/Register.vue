@@ -2,21 +2,38 @@
 	<div class="login-container">
 		<div class="form-container">
 			<div class="login-label">
-				<h3 class="red-text small-text">Sign Up</h3>
+				<p class="red-text small-text">Sign Up</p>
 			</div>
 			<div>
-				<h3 class="blue-text tiny-text">First Name</h3>
-				<input class="login-input full-input blue-text tiny-text" type="text" />
+				<p class="blue-text tiny-text input-label">First Name</p>
+				<input
+					class="login-input full-input blue-text tiny-text"
+					type="text"
+					v-model="userName"
+				/>
 			</div>
 			<div>
-				<h3 class="blue-text tiny-text">Email</h3>
-				<input class="login-input full-input blue-text tiny-text" type="text" />
+				<p class="blue-text tiny-text input-label">Email</p>
+				<input
+					class="login-input full-input blue-text tiny-text"
+					type="text"
+					v-model="email"
+				/>
 			</div>
 			<div>
-				<h3 class="blue-text tiny-text">Password</h3>
-				<input class="login-input full-input blue-text tiny-text" type="text" />
+				<p class="blue-text tiny-text input-label">Password</p>
+				<input
+					class="login-input full-input blue-text tiny-text"
+					type="text"
+					v-model="password"
+				/>
 			</div>
-			<div class="login-label red-text hover-red small-text">Sign up</div>
+			<div
+				@click="createUser"
+				class="login-label red-text hover-red small-text"
+			>
+				Sign up
+			</div>
 			<div class="login-label blue-text tiny-text">
 				Existing Account?
 				<router-link :to="{ path: '/login' }">
@@ -30,12 +47,35 @@
 
 <script>
 import Circle from "./Circle.vue";
+import firebase from "firebase";
 export default {
 	data() {
-		return {};
+		return {
+			userName: "",
+			email: "",
+			password: ""
+		};
 	},
 	components: {
 		"app-circle": Circle
+	},
+	methods: {
+		createUser() {
+			console.log(this.userName);
+			console.log(this.email);
+			console.log(this.password);
+			firebase
+				.auth()
+				.createUserWithEmailAndPassword(this.email, this.password)
+				.catch(function (error) {
+					// Handle Errors here.
+					var errorCode = error.code;
+					console.log(errorCode);
+					var errorMessage = error.message;
+					console.log(errorMessage);
+					// ...
+				});
+		}
 	}
 };
 </script>
@@ -56,6 +96,10 @@ export default {
 	margin-top: 20px;
 }
 
+.input-label {
+	margin-top: 20px;
+}
+
 .login-container {
 	display: flex;
 	justify-content: center;
@@ -63,7 +107,6 @@ export default {
 	height: 100vh;
 }
 .form-container {
-	/*background-color: turquoise;*/
 	color: white;
 	width: 50%;
 	height: 85%;

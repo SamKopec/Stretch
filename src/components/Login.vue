@@ -2,14 +2,14 @@
   <div class="login-container">
     <div class="form-container">
       <div class="login-label">
-        <h3 class="red-text small-text">User Login</h3>
+        <p class="red-text small-text">User Login</p>
       </div>
       <div>
-        <h3 class="blue-text tiny-text">Email</h3>
+        <p class="blue-text tiny-text input-label">Email</p>
         <input class="login-input full-input blue-text tiny-text" type="text" />
       </div>
       <div>
-        <h3 class="blue-text tiny-text">Password</h3>
+        <p class="blue-text tiny-text input-label">Password</p>
         <input class="login-input full-input blue-text tiny-text" type="text" />
       </div>
       <div class="login-label red-text hover-red small-text">Login</div>
@@ -32,7 +32,8 @@ export default {
   },
   components: {
     "app-circle": Circle
-  }
+  },
+  methods: {}
 };
 </script>
 
@@ -52,6 +53,10 @@ export default {
   margin-top: 20px;
 }
 
+.input-label {
+  margin-top: 20px;
+}
+
 .login-container {
   display: flex;
   justify-content: center;
@@ -59,7 +64,6 @@ export default {
   height: 100vh;
 }
 .form-container {
-  /*background-color: turquoise;*/
   color: white;
   width: 50%;
   height: 85%;
