@@ -130,7 +130,7 @@ export default {
       if (this.currentIndex < this.sessionAmount) {
         this.waiting = true;
         setTimeout(() => {
-          this.waiting = false;
+          // this.waiting = false;
           this.startTimer();
         }, 5000);
       }
