@@ -7,7 +7,7 @@ import EditSession from "./components/EditSession.vue";
 export const routes = [
 	{ path: "", component: LandingPage },
 	{ path: "/dashboard", name: "dashboard", component: Dashboard },
-	{ path: "/timer", component: Timer, name: "timer", props: true },
+	{ path: "/stretch/:id", component: Timer, name: "timer", props: true },
 	{ path: "/newsession", component: NewSession, props: true },
 	{
 		path: "/editsession/:id",

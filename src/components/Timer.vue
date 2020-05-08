@@ -1,6 +1,6 @@
 <template>
   <transition appear name="fade">
-    <div>
+    <div v-if="ready">
       <div class="flex top-bar">
         <div>
           <router-link class="arrow-red" tag="div" to="/dashboard">
@@ -48,12 +48,14 @@ import Rest from "./Rest.vue";
 export default {
   data() {
     return {
-      session: this.$route.params.session.stretches,
+      session: "",
       clock: "",
+      sessionUrl: "",
       bestTime: "",
       timerStarted: false,
       restTimerStarted: false,
       setWaitingTimer: true,
+      ready: false,
       timer: "",
       restTimer: "",
       currentIndex: 0,
@@ -191,9 +193,26 @@ export default {
     }
   },
   created() {
+    const newId = window.location.href.split("/").pop();
+    this.sessionUrl = "sessions/" + newId + ".json";
+
+    this.$http
+      .get(this.sessionUrl)
+      .then(
+        (response) => {
+          return response.json();
+        },
+        (error) => {
+          console.log(error);
+        }
+      )
+      .then((data) => {
+        this.session = data.stretches;
+        this.ready = true;
+        this.setTimer();
+        this.sessionAmount = this.session.length;
+      });
     window.addEventListener("keyup", this.spacePause);
-    this.sessionAmount = this.session.length;
-    this.setTimer();
   },
   destroyed() {
     window.removeEventListener("keyup", this.spacePause);

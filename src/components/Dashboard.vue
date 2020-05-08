@@ -27,7 +27,7 @@
 					>
 						<router-link
 							class="flex small-text"
-							:to="{ name: 'timer', params: { session: session } }"
+							:to="{ name: 'timer', params: { id: session.id } }"
 						>
 							<p class="blue-text hover-blue">{{ session.name }}</p>
 							<div class="flex red-text hover-red" style="align-items: center;">
