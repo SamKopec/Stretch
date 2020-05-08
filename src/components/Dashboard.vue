@@ -8,7 +8,7 @@
 			</div>
 		</transition>
 		<transition v-if="headerVisible" appear name="fade">
-			<div class="push-right title-container">
+			<div class="title-container">
 				<h2 class="biggish-text blue-text">Welcome, Sam</h2>
 			</div>
 		</transition>
@@ -20,7 +20,11 @@
 					<p v-if="sessions.length === 0" class="small-text blue-text">
 						No sessions right now!
 					</p>
-					<div v-for="(session, index) in sessions" v-bind:key="index">
+					<div
+						class="session-each"
+						v-for="(session, index) in sessions"
+						v-bind:key="index"
+					>
 						<router-link
 							class="flex small-text"
 							:to="{ name: 'timer', params: { session: session } }"
@@ -44,10 +48,7 @@
 
 		<transition v-if="newVisible" appear name="fade">
 			<div>
-				<router-link
-					class="new-session push-right"
-					:to="{ path: '/newsession' }"
-				>
+				<router-link class="new-session" :to="{ path: '/newsession' }">
 					<h4 class="red-text small-text hover-red">New Session</h4>
 				</router-link>
 			</div>
@@ -120,9 +121,35 @@ export default {
 </script>
 
 <style>
+.title-container {
+	display: flex;
+	justify-content: center;
+	margin-top: 50px;
+	margin-right: 0;
+}
+
+.session-label {
+	display: block;
+	margin: 0;
+	margin-top: 35px;
+	margin-left: 20%;
+}
+
+.session-label h4 {
+	margin-right: 20px;
+}
+
+.session-container {
+	width: 83%;
+	overflow: scroll;
+	margin-top: 20px;
+}
+
 .new-session {
-	margin-top: 80px;
-	margin-right: 245px;
+	margin: auto;
+	margin-top: 30px;
+	display: flex;
+	justify-content: center;
 }
 
 .toast {
@@ -139,27 +166,83 @@ export default {
 	padding: 5px;
 }
 
-.title-container {
-	margin-top: 80px;
-	margin-right: 120px;
-}
-
-.session-container {
-	width: 55%;
-	max-height: 190px;
-	overflow: scroll;
-}
-
-.session-label {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-top: 80px;
-	margin-left: 240px;
-	margin-right: 120px;
-}
-
 .edit {
 	margin-left: 15px;
+}
+
+@media screen and (min-width: 1300px) {
+	.new-session {
+		margin-top: 80px;
+		margin-right: 245px;
+		justify-content: flex-end;
+	}
+
+	.title-container {
+		margin-top: 80px;
+		margin-right: 120px;
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.session-container {
+		width: 55%;
+		max-height: 190px;
+		min-width: 545px;
+	}
+
+	.session-label {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 80px;
+		margin-left: 240px;
+		margin-right: 120px;
+	}
+}
+
+@media screen and (min-width: 850px) {
+	.new-session {
+		margin-top: 80px;
+		margin-right: 245px;
+		justify-content: flex-end;
+	}
+
+	.title-container {
+		margin-top: 80px;
+		margin-right: 120px;
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.session-container {
+		width: 55%;
+		max-height: 190px;
+		min-width: 545px;
+		min-width: 370px;
+	}
+
+	.session-label {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 80px;
+		margin-left: 240px;
+		margin-right: 120px;
+	}
+}
+
+@media screen and (max-width: 450px) {
+	.session-label {
+		margin-left: 10%;
+	}
+
+	.session-container {
+		width: 90%;
+		margin-top: 20px;
+	}
+
+	.session-each {
+		margin-top: 20px;
+	}
 }
 </style>

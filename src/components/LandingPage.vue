@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="push-right title-container">
+    <div class="push-right landingpage-container">
       <div>
         <transition appear name="fade">
           <h2 class="big-text blue-text">Stretch</h2>
@@ -44,9 +44,27 @@ export default {
 };
 </script>
 
-<style>
-.title-container {
+<style scoped>
+.landingpage-container {
   margin-top: 80px;
   margin-right: 120px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.big-text {
+  font-size: 96px;
+}
+
+.small-text {
+  font-size: 36px;
+}
+
+@media screen and (max-width: 650px) {
+  .landingpage-container {
+    margin-right: 0;
+    justify-content: center;
+    min-width: 450px;
+  }
 }
 </style>

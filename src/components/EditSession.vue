@@ -63,17 +63,17 @@
 					</div>
 				</div>
 				<div class="button-container">
-					<h3 @click="editSession" class="red-text hover-red">Edit Session</h3>
-					<h3 @click="destroySession" class="red-text hover-red">
+					<h3 @click="editSession" class="red-text hover-red tiny-text">
+						Edit Session
+					</h3>
+					<h3 @click="destroySession" class="red-text hover-red tiny-text">
 						Delete Session
 					</h3>
 				</div>
 			</div>
-			<div class="vertical-line">
-				<div class="explanation tiny-text blue-text">
-					Drag Stretches Here to Add
-				</div>
-			</div>
+			<p class="vertical-divide tiny-text blue-text">
+				Drag Stretches Here to Add
+			</p>
 			<div class="main-left-container">
 				<div class="top-left-container">
 					<input
@@ -82,7 +82,7 @@
 						style="visibility: hidden;"
 					/>
 				</div>
-				<div class="added-stretches-container">
+				<div class="existing-stretches-container">
 					<div>
 						<draggable
 							class="visible"
@@ -315,28 +315,6 @@ export default {
 </script>
 
 <style>
-.arrow {
-	background: url("../assets/arrow.svg") no-repeat top left;
-	height: 50px;
-	width: 50px;
-	cursor: pointer;
-}
-
-.arrow:hover {
-	background: url("../assets/arrow-hover.svg") no-repeat top left;
-	height: 50px;
-	width: 50px;
-}
-
-.stretch-icon {
-	background-repeat: no-repeat;
-	background-position: top left;
-	height: 50px;
-	width: 50px;
-	margin-right: 50px;
-	margin-bottom: 15px;
-}
-
 .toast {
 	position: absolute;
 	display: flex;
@@ -349,94 +327,5 @@ export default {
 	text-align: center;
 	background-color: #fed766;
 	padding: 5px;
-}
-
-.ghost {
-	opacity: 0.5;
-}
-
-.stretch-container {
-	display: flex;
-}
-
-.main-left-container {
-	width: 50%;
-	display: flex;
-	flex-direction: column;
-	height: 100vh;
-	margin-top: 30px;
-	margin-left: 20px;
-}
-
-.top-left-container {
-	display: flex;
-}
-
-.stretch-input {
-	border-bottom: 3px solid #2ab7ca;
-	padding-bottom: 5px;
-	margin-left: 90px;
-}
-
-.stretch-input-red {
-	width: 50px;
-	border-bottom: 3px solid #fe4a49;
-	margin-left: 20px;
-	margin-right: 5px;
-	text-align: center;
-	color: #fe4a49;
-}
-
-.visible {
-	min-height: 60vh;
-	border: 3px dashed #c3dde3;
-	min-width: 25vw;
-	padding: 30px;
-	cursor: pointer;
-}
-
-.stretch-margin {
-	margin-right: 15px;
-	margin-bottom: 15px;
-}
-
-.name-stretch {
-	display: flex;
-	align-items: center;
-}
-
-.vertical-line {
-	height: 100vh;
-	border-left: 3px dashed #c3dde3;
-	margin-left: 50px;
-}
-
-.explanation {
-	position: absolute;
-	transform: rotate(90deg);
-	top: 50%;
-	left: 40%;
-}
-
-.button-container {
-	display: flex;
-	justify-content: space-between;
-	width: 25vw;
-	padding: 30px;
-	margin-left: 140px;
-}
-
-.button-container h3 {
-	text-align: center;
-	font-size: 20px;
-	margin: 0;
-	cursor: pointer;
-}
-
-.added-stretches-container {
-	align-items: center;
-	display: flex;
-	flex-grow: 0.4;
-	margin-left: 140px;
 }
 </style>

@@ -56,14 +56,12 @@
 					</div>
 				</div>
 				<div @click="makeSession" class="button-container">
-					<h3 class="red-text hover-red">Add Session</h3>
+					<h3 class="red-text hover-red tiny-text">Add Session</h3>
 				</div>
 			</div>
-			<div class="vertical-line">
-				<div class="explanation tiny-text blue-text">
-					Drag Stretches Here to Add
-				</div>
-			</div>
+			<p class="vertical-divide tiny-text blue-text">
+				Drag Stretches Here to Add
+			</p>
 			<div class="main-left-container">
 				<div class="top-left-container">
 					<input
@@ -72,7 +70,7 @@
 						style="visibility: hidden;"
 					/>
 				</div>
-				<div class="added-stretches-container">
+				<div class="existing-stretches-container">
 					<div>
 						<draggable
 							class="visible"
@@ -266,16 +264,24 @@ export default {
 </script>
 
 <style>
+.vertical-divide {
+	writing-mode: vertical-rl;
+	margin: 0px;
+	border-right: 3px dashed #c3dde3;
+	height: 100%;
+	text-align: center;
+}
+
 .arrow {
 	background: url("../assets/arrow.svg") no-repeat top left;
-	height: 50px;
-	width: 50px;
+	height: 30px;
+	width: 30px;
 }
 
 .arrow:hover {
 	background: url("../assets/arrow-hover.svg") no-repeat top left;
-	height: 50px;
-	width: 50px;
+	height: 30px;
+	width: 30px;
 }
 
 .stretch-icon {
@@ -297,21 +303,20 @@ export default {
 
 .main-left-container {
 	width: 50%;
-	display: flex;
-	flex-direction: column;
 	height: 100vh;
 	margin-top: 30px;
 	margin-left: 20px;
+	margin-right: 20px;
 }
 
 .top-left-container {
 	display: flex;
+	height: 50px;
 }
 
 .stretch-input {
 	border-bottom: 3px solid #2ab7ca;
-	padding-bottom: 5px;
-	margin-left: 90px;
+	margin-left: 5%;
 }
 
 .stretch-input-red {
@@ -328,6 +333,7 @@ export default {
 	border: 3px dashed #c3dde3;
 	min-width: 25vw;
 	padding: 30px;
+	overflow: scroll;
 	cursor: pointer;
 }
 
@@ -341,38 +347,43 @@ export default {
 	align-items: center;
 }
 
-.vertical-line {
-	height: 100vh;
-	border-left: 3px dashed #c3dde3;
-	margin-left: 50px;
-}
-
-.explanation {
-	position: absolute;
-	transform: rotate(90deg);
-	top: 50%;
-	left: 40%;
-}
-
 .added-stretches-container {
-	align-items: center;
-	display: flex;
-	flex-grow: 0.4;
-	margin-left: 140px;
+	margin-left: 10%;
+}
+
+.existing-stretches-container {
+	margin-left: 40px;
 }
 
 .button-container {
 	display: flex;
 	justify-content: space-between;
 	width: 25vw;
-	padding: 30px;
-	margin-left: 140px;
+	padding-top: 15px;
+	margin-left: 10%;
 }
 
 .button-container h3 {
 	text-align: center;
-	font-size: 20px;
 	margin: 0;
+	margin-right: 5%;
 	cursor: pointer;
+}
+
+@media screen and (min-width: 850px) {
+	.arrow {
+		height: 50px;
+		width: 50px;
+	}
+	.arrow:hover {
+		height: 50px;
+		width: 50px;
+	}
+}
+
+@media screen and (max-width: 320px) {
+	.stretch-input {
+		max-width: 154px;
+	}
 }
 </style>

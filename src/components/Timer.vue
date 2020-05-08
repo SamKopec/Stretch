@@ -288,7 +288,18 @@ export default {
 }
 
 .timer {
-  font-size: 230px;
+  font-size: 143px;
   margin: 0;
+}
+
+@media screen and (min-width: 850px) {
+  .timer {
+    font-size: 230px;
+  }
+}
+@media screen and (max-width: 450px) {
+  .timer {
+    font-size: 100px;
+  }
 }
 </style>
