@@ -92,7 +92,7 @@
 						>
 							<div
 								class="stretch-container"
-								v-for="stretch in availableStretches"
+								v-for="(stretch, index) in availableStretches"
 								v-bind:key="`${stretch.name}-${index}`"
 							>
 								<img :src="getImgUrl(stretch.icon)" class="stretch-icon" />
