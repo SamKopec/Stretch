@@ -56,7 +56,7 @@
 					</div>
 				</div>
 				<div @click="makeSession" class="button-container">
-					<h3 class="red-text hover-red">Add Session</h3>
+					<h3 class="red-text hover-red tiny-text">Add Session</h3>
 				</div>
 			</div>
 			<p class="vertical-divide tiny-text blue-text">
@@ -274,14 +274,14 @@ export default {
 
 .arrow {
 	background: url("../assets/arrow.svg") no-repeat top left;
-	height: 50px;
-	width: 50px;
+	height: 30px;
+	width: 30px;
 }
 
 .arrow:hover {
 	background: url("../assets/arrow-hover.svg") no-repeat top left;
-	height: 50px;
-	width: 50px;
+	height: 30px;
+	width: 30px;
 }
 
 .stretch-icon {
@@ -316,8 +316,7 @@ export default {
 
 .stretch-input {
 	border-bottom: 3px solid #2ab7ca;
-	padding-bottom: 5px;
-	margin-left: 90px;
+	margin-left: 5%;
 }
 
 .stretch-input-red {
@@ -334,6 +333,7 @@ export default {
 	border: 3px dashed #c3dde3;
 	min-width: 25vw;
 	padding: 30px;
+	overflow: scroll;
 	cursor: pointer;
 }
 
@@ -348,7 +348,7 @@ export default {
 }
 
 .added-stretches-container {
-	margin-left: 140px;
+	margin-left: 10%;
 }
 
 .existing-stretches-container {
@@ -359,14 +359,31 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	width: 25vw;
-	padding: 30px;
-	margin-left: 140px;
+	padding-top: 15px;
+	margin-left: 10%;
 }
 
 .button-container h3 {
 	text-align: center;
-	font-size: 20px;
 	margin: 0;
+	margin-right: 5%;
 	cursor: pointer;
+}
+
+@media screen and (min-width: 850px) {
+	.arrow {
+		height: 50px;
+		width: 50px;
+	}
+	.arrow:hover {
+		height: 50px;
+		width: 50px;
+	}
+}
+
+@media screen and (max-width: 320px) {
+	.stretch-input {
+		max-width: 154px;
+	}
 }
 </style>

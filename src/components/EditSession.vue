@@ -63,8 +63,10 @@
 					</div>
 				</div>
 				<div class="button-container">
-					<h3 @click="editSession" class="red-text hover-red">Edit Session</h3>
-					<h3 @click="destroySession" class="red-text hover-red">
+					<h3 @click="editSession" class="red-text hover-red tiny-text">
+						Edit Session
+					</h3>
+					<h3 @click="destroySession" class="red-text hover-red tiny-text">
 						Delete Session
 					</h3>
 				</div>
