@@ -5,7 +5,7 @@ import VueResource from "vue-resource";
 import { routes } from "./routes";
 import { firebaseLink } from "./myInfo";
 import { firebaseConfig } from "./myInfo";
-import firebase from "firebase";
+import firebase from "firebase/app";
 
 Vue.config.productionTip = false;
 firebase.initializeApp(firebaseConfig);
