@@ -6,13 +6,23 @@
       </div>
       <div>
         <p class="blue-text tiny-text input-label">Email</p>
-        <input class="login-input full-input blue-text tiny-text" type="text" />
+        <input
+          class="login-input full-input blue-text tiny-text"
+          type="text"
+          v-model="email"
+        />
       </div>
       <div>
         <p class="blue-text tiny-text input-label">Password</p>
-        <input class="login-input full-input blue-text tiny-text" type="text" />
+        <input
+          class="login-input full-input blue-text tiny-text"
+          type="text"
+          v-model="password"
+        />
       </div>
-      <div class="login-label red-text hover-red small-text">Login</div>
+      <div @click="signIn" class="login-label red-text hover-red small-text">
+        Login
+      </div>
       <div class="login-label blue-text tiny-text">
         New to Stretch?
         <router-link :to="{ path: '/new-user' }">
@@ -26,14 +36,33 @@
 
 <script>
 import Circle from "./Circle.vue";
+import firebase from "firebase";
 export default {
   data() {
-    return {};
+    return {
+      email: "",
+      password: ""
+    };
   },
   components: {
     "app-circle": Circle
   },
-  methods: {}
+  methods: {
+    signIn() {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(() => {
+          this.$router.push({
+            name: "dashboard",
+            params: { update: "fromLanding" }
+          });
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    }
+  }
 };
 </script>
 

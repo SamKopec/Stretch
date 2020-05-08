@@ -61,19 +61,30 @@ export default {
 	},
 	methods: {
 		createUser() {
-			console.log(this.userName);
-			console.log(this.email);
-			console.log(this.password);
 			firebase
 				.auth()
 				.createUserWithEmailAndPassword(this.email, this.password)
-				.catch(function (error) {
-					// Handle Errors here.
-					var errorCode = error.code;
-					console.log(errorCode);
-					var errorMessage = error.message;
-					console.log(errorMessage);
-					// ...
+				.then(() => {
+					const user = firebase.auth().currentUser;
+					this.addUserName(user);
+				})
+				.catch((error) => {
+					console.log(error.message);
+				});
+		},
+		addUserName(user) {
+			user
+				.updateProfile({
+					displayName: this.userName
+				})
+				.then(() => {
+					this.$router.push({
+						name: "dashboard",
+						params: { update: "fromLanding" }
+					});
+				})
+				.catch((error) => {
+					console.log(error.message);
 				});
 		}
 	}

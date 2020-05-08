@@ -59,6 +59,7 @@
 
 <script>
 import Circle from "./Circle.vue";
+// import firebase from "firebase";
 export default {
 	data() {
 		return {
@@ -68,6 +69,7 @@ export default {
 			sessions: [],
 			toastVisible: false,
 			toastContent: ""
+			// displayName: ""
 		};
 	},
 	components: {
@@ -83,6 +85,8 @@ export default {
 		}
 	},
 	created() {
+		// this.displayName = firebase.auth().currentUser.displayName;
+		// console.log(user.displayName);
 		if (this.$route.params.update === "created") {
 			this.showToast("Your Session was created");
 		} else if (this.$route.params.update === "deleted") {
