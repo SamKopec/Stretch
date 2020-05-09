@@ -1,22 +1,34 @@
-let currentUser;
+import firebase from "firebase";
+let currentUser = {};
 
-export const setUser = (user) => {
-	currentUser = user.displayName;
-	localStorage.setItem("user", user.displayName);
+export const setUser = (userUid) => {
+	const ref = firebase.database().ref("users/" + userUid);
+	ref.on(
+		"value",
+		(snapshot) => {
+			currentUser = snapshot.val();
+			localStorage.setItem("user", JSON.stringify(currentUser));
+		},
+		(errorObject) => {
+			console.log("The read failed: " + errorObject.code);
+		}
+	);
 };
 
-const checkStorageForUser = () => {
-	if (!currentUser) {
-		return localStorage.getItem("user");
+const assignUserFromStorage = () => {
+	if (!currentUser.email) {
+		const userInfo = localStorage.getItem("user");
+		return JSON.parse(userInfo);
+	} else {
+		return currentUser;
 	}
-	return currentUser;
 };
 
-export const getDisplayName = () => {
-	let user = checkStorageForUser();
-	if (user) {
+export const getUser = () => {
+	if (!currentUser.email) {
+		const user = assignUserFromStorage();
 		return user;
 	} else {
-		return "";
+		return currentUser;
 	}
 };

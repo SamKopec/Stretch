@@ -9,7 +9,7 @@
 		</transition>
 		<transition v-if="headerVisible" appear name="fade">
 			<div class="title-container">
-				<h2 class="biggish-text blue-text">Welcome, {{ displayName }}</h2>
+				<h2 class="biggish-text blue-text">Welcome, {{ userName }}</h2>
 			</div>
 		</transition>
 
@@ -69,7 +69,7 @@ export default {
 			sessions: [],
 			toastVisible: false,
 			toastContent: "",
-			displayName: "Guest"
+			userName: "Guest"
 		};
 	},
 	components: {
@@ -85,9 +85,9 @@ export default {
 		}
 	},
 	created() {
-		let userName = auth.getDisplayName();
-		if (userName) {
-			this.displayName = userName;
+		let user = auth.getUser();
+		if (user.userName) {
+			this.userName = user.userName;
 		}
 		if (this.$route.params.update === "created") {
 			this.showToast("Your Session was created");

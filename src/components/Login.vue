@@ -55,7 +55,7 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then((data) => {
-          auth.setUser(data.user);
+          auth.setUser(data.user.uid);
           this.$router.push({
             name: "dashboard",
             params: { update: "fromLanding" }
