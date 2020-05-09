@@ -2,17 +2,14 @@ import firebase from "firebase";
 let currentUser = {};
 
 export const setUser = (userUid) => {
-	const ref = firebase.database().ref("users/" + userUid);
-	ref.on(
-		"value",
-		(snapshot) => {
+	const ref = firebase
+		.database()
+		.ref("users/" + userUid)
+		.once("value")
+		.then((snapshot) => {
 			currentUser = snapshot.val();
 			localStorage.setItem("user", JSON.stringify(currentUser));
-		},
-		(errorObject) => {
-			console.log("The read failed: " + errorObject.code);
-		}
-	);
+		});
 };
 
 const assignUserFromStorage = () => {

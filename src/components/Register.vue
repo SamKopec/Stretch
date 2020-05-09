@@ -82,6 +82,10 @@ export default {
 					userName: this.userName,
 					email: this.email
 				});
+			this.$router.push({
+				name: "dashboard",
+				params: { update: "fromLanding" }
+			});
 		}
 	}
 };
