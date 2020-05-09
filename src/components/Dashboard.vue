@@ -9,7 +9,7 @@
 		</transition>
 		<transition v-if="headerVisible" appear name="fade">
 			<div class="title-container">
-				<h2 class="biggish-text blue-text">Welcome, Sam</h2>
+				<h2 class="biggish-text blue-text">Welcome, {{ userName }}</h2>
 			</div>
 		</transition>
 
@@ -59,6 +59,7 @@
 
 <script>
 import Circle from "./Circle.vue";
+import * as auth from "../auth";
 export default {
 	data() {
 		return {
@@ -67,7 +68,8 @@ export default {
 			sessionsVisible: true,
 			sessions: [],
 			toastVisible: false,
-			toastContent: ""
+			toastContent: "",
+			userName: "Guest"
 		};
 	},
 	components: {
@@ -83,6 +85,10 @@ export default {
 		}
 	},
 	created() {
+		let user = auth.getUser();
+		if (user.userName) {
+			this.userName = user.userName;
+		}
 		if (this.$route.params.update === "created") {
 			this.showToast("Your Session was created");
 		} else if (this.$route.params.update === "deleted") {
