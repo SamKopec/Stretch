@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="ready">
 		<transition appear name="fade-toast">
 			<div v-if="toastVisible" class="toast">
 				<div class="red-text tiny-text white-back">
@@ -59,7 +59,7 @@
 
 <script>
 import Circle from "./Circle.vue";
-import * as auth from "../auth";
+import * as auth from "../services/auth";
 export default {
 	data() {
 		return {
@@ -69,7 +69,8 @@ export default {
 			sessions: [],
 			toastVisible: false,
 			toastContent: "",
-			userName: "Guest"
+			userName: "Guest",
+			ready: false
 		};
 	},
 	components: {
@@ -82,13 +83,25 @@ export default {
 			setTimeout(() => {
 				this.toastVisible = false;
 			}, 2000);
+		},
+		async getUserFromAuth() {
+			let user = auth.getUser();
+			if (user) {
+				this.userName = user.userName;
+				this.ready = true;
+			} else {
+				await auth.establishAuth();
+				user = auth.getUser();
+				this.userName = user.userName;
+				this.ready = true;
+				if (!user) {
+					console.log("user is not logged in");
+				}
+			}
 		}
 	},
 	created() {
-		let user = auth.getUser();
-		if (user.userName) {
-			this.userName = user.userName;
-		}
+		this.getUserFromAuth();
 		if (this.$route.params.update === "created") {
 			this.showToast("Your Session was created");
 		} else if (this.$route.params.update === "deleted") {
