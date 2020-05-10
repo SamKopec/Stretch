@@ -54,8 +54,7 @@ export default {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        .then(async (data) => {
-          await auth.establishAuth();
+        .then((data) => {
           this.$router.push({
             name: "dashboard",
             params: { update: "fromLanding" }

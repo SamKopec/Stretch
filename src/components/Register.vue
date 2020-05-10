@@ -72,7 +72,7 @@ export default {
 					console.log(error.message);
 				});
 		},
-		async makeUser(user) {
+		makeUser(user) {
 			firebase
 				.database()
 				.ref("users/" + user.uid)
@@ -80,7 +80,6 @@ export default {
 					userName: this.userName,
 					email: this.email
 				});
-			await auth.establishAuth();
 			this.$router.push({
 				name: "dashboard",
 				params: { update: "fromLanding" }
