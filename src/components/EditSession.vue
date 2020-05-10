@@ -112,6 +112,7 @@
 
 <script>
 import draggable from "vuedraggable";
+import * as auth from "../services/auth";
 export default {
 	data() {
 		return {
@@ -230,11 +231,13 @@ export default {
 		editSession() {
 			this.determineDuration();
 			this.filterOutEmpties();
+			let user = auth.getUser();
 			let changedSession = {
 				name: this.sessionName,
 				minutes: parseInt(this.sessionMinutes),
 				seconds: parseInt(this.sessionSeconds),
-				stretches: this.stretches
+				stretches: this.stretches,
+				user: user.uid
 			};
 			if (changedSession.stretches.length >= 1) {
 				this.$http.put(this.sessionUrl, changedSession).then(

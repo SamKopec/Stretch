@@ -60,7 +60,6 @@
 <script>
 import Circle from "./Circle.vue";
 import * as auth from "../services/auth";
-import * as resource from "../services/resources";
 export default {
 	data() {
 		return {
@@ -89,25 +88,40 @@ export default {
 			let user = auth.getUser();
 			if (user) {
 				this.user = user;
-				this.ready = true;
 			} else {
 				await auth.establishAuth();
 				user = auth.getUser();
 				this.user = user;
-				this.ready = true;
 				if (!user) {
 					console.log("user is not logged in");
 				}
 			}
 		},
-		async grabSessions() {
-			await resource.callForSessionsbyUser(this.user.uid);
-			this.sessions = resource.getSessions();
-			console.log(this.sessions);
+		grabSessions() {
+			this.$http
+				.get(`sessions.json?orderBy="user"&equalTo="${this.user.uid}"`)
+				.then(
+					(response) => {
+						return response.body;
+					},
+					(error) => {
+						console.log(error);
+					}
+				)
+				.then((data) => {
+					let dataArray = [];
+					for (let key in data) {
+						const session = data[key];
+						session.id = key;
+						dataArray.push(session);
+					}
+					this.sessions = dataArray;
+					this.ready = true;
+				});
 		}
 	},
-	created() {
-		this.getUserFromAuth();
+	async created() {
+		await this.getUserFromAuth();
 		if (this.$route.params.update === "created") {
 			this.showToast("Your Session was created");
 		} else if (this.$route.params.update === "deleted") {
@@ -149,7 +163,6 @@ export default {
 .session-container {
 	width: 83%;
 	overflow: scroll;
-	margin-top: 20px;
 }
 
 .new-session {
