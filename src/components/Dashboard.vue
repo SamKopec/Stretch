@@ -54,9 +54,9 @@
 				>
 					<h4 class="red-text small-text hover-red">New Session</h4>
 				</router-link>
-				<router-link class="new-session" :to="{ path: '/newsession' }">
+				<div class="new-session" @click="logout">
 					<h4 class="red-text small-text hover-red">Logout</h4>
-				</router-link>
+				</div>
 			</div>
 		</transition>
 		<app-circle></app-circle>
@@ -89,6 +89,14 @@ export default {
 			setTimeout(() => {
 				this.toastVisible = false;
 			}, 2000);
+		},
+		async logout() {
+			const isSignedOut = await auth.logout();
+			if (isSignedOut) {
+				this.$router.push({
+					path: "/login"
+				});
+			}
 		},
 		grabSessions() {
 			this.$http

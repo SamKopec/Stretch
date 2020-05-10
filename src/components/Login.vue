@@ -54,14 +54,15 @@ export default {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        .then((data) => {
+        .then(async (data) => {
+          await auth.setUser(data.user.uid);
           this.$router.push({
             name: "dashboard",
             params: { update: "fromLanding" }
           });
         })
         .catch((error) => {
-          console.log("error");
+          console.log(error);
         });
     }
   }

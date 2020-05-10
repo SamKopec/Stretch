@@ -3,7 +3,7 @@ import fireauth from "firebase/auth";
 import firedata from "firebase/database";
 let currentUser = null;
 
-const setUser = (userUid) => {
+export const setUser = (userUid) => {
 	return new Promise((resolve, reject) => {
 		firebase
 			.database()
@@ -20,10 +20,27 @@ const setUser = (userUid) => {
 	});
 };
 
+export const logout = () => {
+	return new Promise((resolve, reject) => {
+		firebase
+			.auth()
+			.signOut()
+			.then(() => {
+				resolve(true);
+			})
+			.catch(function (error) {
+				reject(false);
+			});
+	});
+};
+
 export const establishAuth = () => {
 	return new Promise((resolve, reject) => {
+		console.log(firebase.auth().currentUser);
+
 		firebase.auth().onAuthStateChanged(async (user) => {
 			//There is a user logged in
+			console.log("auth state change");
 			if (user) {
 				try {
 					await setUser(user.uid);

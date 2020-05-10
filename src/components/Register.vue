@@ -79,11 +79,17 @@ export default {
 				.set({
 					userName: this.userName,
 					email: this.email
+				})
+				.then(async () => {
+					await auth.setUser(user.uid);
+					this.$router.push({
+						name: "dashboard",
+						params: { update: "fromLanding" }
+					});
+				})
+				.catch((error) => {
+					console.log(error);
 				});
-			this.$router.push({
-				name: "dashboard",
-				params: { update: "fromLanding" }
-			});
 		}
 	}
 };

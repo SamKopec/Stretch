@@ -6,7 +6,6 @@ import NewSession from "./components/NewSession.vue";
 import EditSession from "./components/EditSession.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
-import firebase from "firebase";
 import * as auth from "./services/auth";
 
 export const routes = [
@@ -66,9 +65,9 @@ export const router = new VueRouter({
 	mode: "history"
 });
 
-router.beforeEach(async (to, from, next) => {
-	await auth.establishAuth();
+router.beforeEach((to, from, next) => {
 	const user = auth.getUser();
+	console.log("Rerouting!", user);
 	if (to.matched.some((record) => record.meta.requiresAuth)) {
 		if (!user) {
 			next({ path: "/login", query: { redirect: to.fullPath } });
