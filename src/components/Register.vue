@@ -72,8 +72,8 @@ export default {
 					console.log(error.message);
 				});
 		},
-		makeUser(user) {
-			auth.establishAuth();
+		async makeUser(user) {
+			await auth.establishAuth();
 			firebase
 				.database()
 				.ref("users/" + user.uid)
