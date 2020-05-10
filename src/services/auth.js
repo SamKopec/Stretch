@@ -11,6 +11,7 @@ const setUser = (userUid) => {
 			.once("value")
 			.then((snapshot) => {
 				currentUser = snapshot.val();
+				currentUser.uid = userUid;
 				resolve();
 			})
 			.catch((err) => {

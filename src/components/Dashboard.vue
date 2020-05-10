@@ -9,7 +9,7 @@
 		</transition>
 		<transition v-if="headerVisible" appear name="fade">
 			<div class="title-container">
-				<h2 class="biggish-text blue-text">Welcome, {{ userName }}</h2>
+				<h2 class="biggish-text blue-text">Welcome, {{ user.userName }}</h2>
 			</div>
 		</transition>
 
@@ -60,6 +60,7 @@
 <script>
 import Circle from "./Circle.vue";
 import * as auth from "../services/auth";
+import * as resource from "../services/resources";
 export default {
 	data() {
 		return {
@@ -69,7 +70,7 @@ export default {
 			sessions: [],
 			toastVisible: false,
 			toastContent: "",
-			userName: "Guest",
+			user: { userName: "Guest", uid: "", email: "" },
 			ready: false
 		};
 	},
@@ -87,17 +88,22 @@ export default {
 		async getUserFromAuth() {
 			let user = auth.getUser();
 			if (user) {
-				this.userName = user.userName;
+				this.user = user;
 				this.ready = true;
 			} else {
 				await auth.establishAuth();
 				user = auth.getUser();
-				this.userName = user.userName;
+				this.user = user;
 				this.ready = true;
 				if (!user) {
 					console.log("user is not logged in");
 				}
 			}
+		},
+		async grabSessions() {
+			await resource.callForSessionsbyUser(this.user.uid);
+			this.sessions = resource.getSessions();
+			console.log(this.sessions);
 		}
 	},
 	created() {
@@ -116,25 +122,7 @@ export default {
 				this.newVisible = true;
 			}, 2000);
 		}
-		this.$http
-			.get("sessions.json")
-			.then(
-				(response) => {
-					return response.json();
-				},
-				(error) => {
-					console.log(error);
-				}
-			)
-			.then((data) => {
-				let dataArray = [];
-				for (let key in data) {
-					const session = data[key];
-					session.id = key;
-					dataArray.push(session);
-				}
-				this.sessions = dataArray;
-			});
+		this.grabSessions();
 	}
 };
 </script>

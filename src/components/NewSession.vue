@@ -98,6 +98,7 @@
 
 <script>
 import draggable from "vuedraggable";
+import * as auth from "../services/auth";
 export default {
 	data() {
 		return {
@@ -196,16 +197,17 @@ export default {
 		makeSession() {
 			this.determineDuration();
 			this.filterOutEmpties();
+			let user = auth.getUser();
 			let newSession = {
 				name: this.sessionName,
 				minutes: this.sessionMinutes,
 				seconds: this.sessionSeconds,
-				stretches: this.stretches
+				stretches: this.stretches,
+				user: user.uid
 			};
 			if (newSession.stretches.length >= 1) {
 				this.$http.post("sessions.json", newSession).then(
 					(response) => {
-						console.log(response);
 						this.$router.push({
 							name: "dashboard",
 							params: { update: "created" }
