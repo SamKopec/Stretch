@@ -38,7 +38,7 @@
 import Circle from "./Circle.vue";
 import firebase from "firebase/app";
 import fireauth from "firebase/auth";
-import * as auth from "../auth";
+import * as auth from "../services/auth";
 export default {
   data() {
     return {
@@ -54,15 +54,15 @@ export default {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        .then((data) => {
-          auth.setUser(data.user.uid);
+        .then(async (data) => {
+          await auth.setUser(data.user.uid);
           this.$router.push({
             name: "dashboard",
             params: { update: "fromLanding" }
           });
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log(error);
         });
     }
   }

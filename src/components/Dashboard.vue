@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="ready">
 		<transition appear name="fade-toast">
 			<div v-if="toastVisible" class="toast">
 				<div class="red-text tiny-text white-back">
@@ -9,7 +9,7 @@
 		</transition>
 		<transition v-if="headerVisible" appear name="fade">
 			<div class="title-container">
-				<h2 class="biggish-text blue-text">Welcome, {{ userName }}</h2>
+				<h2 class="biggish-text blue-text">Welcome, {{ user.userName }}</h2>
 			</div>
 		</transition>
 
@@ -48,9 +48,15 @@
 
 		<transition v-if="newVisible" appear name="fade">
 			<div>
-				<router-link class="new-session" :to="{ path: '/newsession' }">
+				<router-link
+					class="new-session button-margin"
+					:to="{ path: '/newsession' }"
+				>
 					<h4 class="red-text small-text hover-red">New Session</h4>
 				</router-link>
+				<div class="new-session" @click="logout">
+					<h4 class="red-text small-text hover-red">Logout</h4>
+				</div>
 			</div>
 		</transition>
 		<app-circle></app-circle>
@@ -59,7 +65,7 @@
 
 <script>
 import Circle from "./Circle.vue";
-import * as auth from "../auth";
+import * as auth from "../services/auth";
 export default {
 	data() {
 		return {
@@ -69,7 +75,8 @@ export default {
 			sessions: [],
 			toastVisible: false,
 			toastContent: "",
-			userName: "Guest"
+			user: { userName: "Guest", uid: "", email: "" },
+			ready: false
 		};
 	},
 	components: {
@@ -82,13 +89,40 @@ export default {
 			setTimeout(() => {
 				this.toastVisible = false;
 			}, 2000);
+		},
+		async logout() {
+			const isSignedOut = await auth.logout();
+			if (isSignedOut) {
+				this.$router.push({
+					path: "/login"
+				});
+			}
+		},
+		grabSessions() {
+			this.$http
+				.get(`sessions.json?orderBy="user"&equalTo="${this.user.uid}"`)
+				.then(
+					(response) => {
+						return response.body;
+					},
+					(error) => {
+						console.log(error);
+					}
+				)
+				.then((data) => {
+					let dataArray = [];
+					for (let key in data) {
+						const session = data[key];
+						session.id = key;
+						dataArray.push(session);
+					}
+					this.sessions = dataArray;
+					this.ready = true;
+				});
 		}
 	},
-	created() {
-		let user = auth.getUser();
-		if (user.userName) {
-			this.userName = user.userName;
-		}
+	async created() {
+		this.user = auth.getUser();
 		if (this.$route.params.update === "created") {
 			this.showToast("Your Session was created");
 		} else if (this.$route.params.update === "deleted") {
@@ -103,25 +137,7 @@ export default {
 				this.newVisible = true;
 			}, 2000);
 		}
-		this.$http
-			.get("sessions.json")
-			.then(
-				(response) => {
-					return response.json();
-				},
-				(error) => {
-					console.log(error);
-				}
-			)
-			.then((data) => {
-				let dataArray = [];
-				for (let key in data) {
-					const session = data[key];
-					session.id = key;
-					dataArray.push(session);
-				}
-				this.sessions = dataArray;
-			});
+		this.grabSessions();
 	}
 };
 </script>
@@ -148,7 +164,7 @@ export default {
 .session-container {
 	width: 83%;
 	overflow: scroll;
-	margin-top: 20px;
+	margin-top: 30px;
 }
 
 .new-session {
@@ -156,6 +172,10 @@ export default {
 	margin-top: 30px;
 	display: flex;
 	justify-content: center;
+}
+
+.button-margin {
+	margin-top: 80px;
 }
 
 .toast {
@@ -178,7 +198,6 @@ export default {
 
 @media screen and (min-width: 1300px) {
 	.new-session {
-		margin-top: 80px;
 		margin-right: 245px;
 		justify-content: flex-end;
 	}
@@ -194,6 +213,7 @@ export default {
 		width: 55%;
 		max-height: 190px;
 		min-width: 545px;
+		margin-top: 0px;
 	}
 
 	.session-label {
@@ -208,7 +228,6 @@ export default {
 
 @media screen and (min-width: 850px) {
 	.new-session {
-		margin-top: 80px;
 		margin-right: 245px;
 		justify-content: flex-end;
 	}
@@ -225,6 +244,7 @@ export default {
 		max-height: 190px;
 		min-width: 545px;
 		min-width: 370px;
+		margin-top: 0px;
 	}
 
 	.session-label {
