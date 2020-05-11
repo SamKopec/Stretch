@@ -25,6 +25,9 @@
 
 <script>
 import Circle from "./Circle.vue";
+import firebase from "firebase/app";
+import fireauth from "firebase/auth";
+import * as auth from "../services/auth";
 export default {
   name: "app",
   data() {
@@ -42,7 +45,22 @@ export default {
   },
   methods: {
     logChoices() {
-      console.log("guest");
+      firebase
+        .auth()
+        .signInAnonymously()
+        .then(async (data) => {
+          await auth.setUser(data.user.uid);
+          console.log("awaited done");
+          this.$router.push({
+            name: "dashboard",
+            params: { update: "fromLanding" }
+          });
+        })
+        .catch((error) => {
+          // Handle Errors here.
+          console.log(error.message);
+          // ...
+        });
     }
   }
 };

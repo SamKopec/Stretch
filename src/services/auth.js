@@ -10,12 +10,35 @@ export const setUser = (userUid) => {
 			.ref("users/" + userUid)
 			.once("value")
 			.then((snapshot) => {
+				console.log("snap", snapshot.val());
 				currentUser = snapshot.val();
 				currentUser.uid = userUid;
 				resolve();
 			})
 			.catch((err) => {
+				console.log(err);
 				reject(err);
+			});
+	});
+};
+
+export const createAnonUser = (userUid) => {
+	return new Promise((resolve, reject) => {
+		firebase
+			.database()
+			.ref("users/" + userUid)
+			.set({
+				userName: "Guest",
+				email: null
+			})
+			.then(async (data) => {
+				await setUser(userUid);
+				resolve();
+			})
+			.catch((error) => {
+				console.log("Erroring here?");
+				console.log(error);
+				reject();
 			});
 	});
 };
@@ -35,18 +58,27 @@ export const logout = () => {
 };
 
 export const establishAuth = () => {
+	console.log("establishAuth");
 	return new Promise((resolve, reject) => {
-		console.log(firebase.auth().currentUser);
-
 		firebase.auth().onAuthStateChanged(async (user) => {
 			//There is a user logged in
-			console.log("auth state change");
 			if (user) {
-				try {
-					await setUser(user.uid);
-					resolve();
-				} catch (error) {
-					reject();
+				console.log("is anon?", user.isAnonymous);
+				console.log("is anon?", user.uid);
+				if (user.isAnonymous) {
+					try {
+						await createAnonUser(user.uid);
+						resolve();
+					} catch (error) {
+						reject();
+					}
+				} else {
+					try {
+						await setUser(user.uid);
+						resolve();
+					} catch (error) {
+						reject();
+					}
 				}
 			}
 			//There is no user logged in

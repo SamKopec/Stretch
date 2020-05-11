@@ -75,7 +75,7 @@ export const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
 	const user = auth.getUser();
-	console.log("Rerouting!", user);
+	console.log("user", user);
 	if (to.matched.some((record) => record.meta.requiresAuth)) {
 		if (!user) {
 			next({ path: "/portal", query: { redirect: to.fullPath } });

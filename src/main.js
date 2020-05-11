@@ -11,7 +11,9 @@ import * as auth from "./services/auth";
 firebase.initializeApp(firebaseConfig);
 
 (async () => {
+	console.log("pre");
 	await auth.establishAuth();
+	console.log("post");
 	Vue.config.productionTip = false;
 	Vue.use(VueRouter);
 	Vue.use(VueResource);
