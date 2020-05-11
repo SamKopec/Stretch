@@ -32,6 +32,7 @@ export const createAnonUser = (userUid) => {
 			})
 			.then(async (data) => {
 				await setUser(userUid);
+				currentUser.isAnonymous = true;
 				resolve();
 			})
 			.catch((error) => {
@@ -71,6 +72,7 @@ export const establishAuth = () => {
 				} else {
 					try {
 						await setUser(user.uid);
+						currentUser.isAnonymous = false;
 						resolve();
 					} catch {
 						reject();

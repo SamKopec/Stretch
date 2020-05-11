@@ -1,5 +1,5 @@
 <template>
-	<div v-if="ready">
+	<div>
 		<transition appear name="fade-toast">
 			<div v-if="toastVisible" class="toast">
 				<div class="red-text tiny-text white-back">
@@ -54,8 +54,11 @@
 				>
 					<h4 class="red-text small-text hover-red">New Session</h4>
 				</router-link>
-				<div class="new-session" @click="logout">
+				<div v-if="user.email" class="new-session" @click="logout">
 					<h4 class="red-text small-text hover-red">Logout</h4>
+				</div>
+				<div v-else class="new-session" @click="logout">
+					<h4 class="red-text small-text hover-red">Create Account</h4>
 				</div>
 			</div>
 		</transition>
@@ -75,8 +78,7 @@ export default {
 			sessions: [],
 			toastVisible: false,
 			toastContent: "",
-			user: { userName: "Guest", uid: "", email: "" },
-			ready: false
+			user: null
 		};
 	},
 	components: {
@@ -98,6 +100,12 @@ export default {
 				});
 			}
 		},
+		enterCreateUser() {
+			this.$router.push({
+				name: "dashboard",
+				params: { uid: user.uid }
+			});
+		},
 		grabSessions() {
 			this.$http
 				.get(`sessions.json?orderBy="user"&equalTo="${this.user.uid}"`)
@@ -117,12 +125,12 @@ export default {
 						dataArray.push(session);
 					}
 					this.sessions = dataArray;
-					this.ready = true;
 				});
 		}
 	},
 	async created() {
 		this.user = auth.getUser();
+		console.log(this.user);
 		if (this.$route.params.update === "created") {
 			this.showToast("Your Session was created");
 		} else if (this.$route.params.update === "deleted") {
