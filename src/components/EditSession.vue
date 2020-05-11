@@ -122,6 +122,7 @@ export default {
 			sessionUrl: "",
 			stretches: [],
 			toastVisible: false,
+			uid: null,
 			availableStretches: [],
 			constantStretches: [
 				{
@@ -204,6 +205,7 @@ export default {
 			)
 			.then((data) => {
 				this.sessionName = data.name;
+				this.uid = data.user;
 				this.stretches = data.stretches;
 			});
 
@@ -237,7 +239,7 @@ export default {
 				minutes: parseInt(this.sessionMinutes),
 				seconds: parseInt(this.sessionSeconds),
 				stretches: this.stretches,
-				user: user.uid
+				user: this.uid
 			};
 			if (changedSession.stretches.length >= 1) {
 				this.$http.put(this.sessionUrl, changedSession).then(
