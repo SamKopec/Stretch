@@ -5,7 +5,9 @@ import Timer from "./components/Timer.vue";
 import NewSession from "./components/NewSession.vue";
 import EditSession from "./components/EditSession.vue";
 import Login from "./components/Login.vue";
+import LoginChoice from "./components/LoginChoice.vue";
 import Register from "./components/Register.vue";
+import RegisterFromGuest from "./components/RegisterFromGuest.vue";
 import * as auth from "./services/auth";
 
 export const routes = [
@@ -43,10 +45,25 @@ export const routes = [
 		}
 	},
 	{
+		path: "/portal",
+		component: LoginChoice,
+		meta: {
+			requiresGuest: true
+		}
+	},
+	{
 		path: "/new-user",
 		component: Register,
 		meta: {
 			requiresGuest: true
+		}
+	},
+	{
+		path: "/create-account",
+		component: RegisterFromGuest,
+		name: "guest-registration",
+		meta: {
+			requiresAnon: true
 		}
 	},
 	{
@@ -67,16 +84,25 @@ export const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
 	const user = auth.getUser();
-	console.log("Rerouting!", user);
-	if (to.matched.some((record) => record.meta.requiresAuth)) {
-		if (!user) {
-			next({ path: "/login", query: { redirect: to.fullPath } });
+	if (to.matched.some((record) => record.meta.requiresAnon)) {
+		if (user) {
+			if (!user.isAnonymous) {
+				next({ path: "/dashboard", query: { redirect: to.fullPath } });
+			} else {
+				next();
+			}
 		} else {
-			next();
+			next({ path: "/portal", query: { redirect: to.fullPath } });
 		}
 	} else if (to.matched.some((record) => record.meta.requiresGuest)) {
 		if (user) {
 			next({ path: "/dashboard", query: { redirect: to.fullPath } });
+		} else {
+			next();
+		}
+	} else if (to.matched.some((record) => record.meta.requiresAuth)) {
+		if (!user) {
+			next({ path: "/portal", query: { redirect: to.fullPath } });
 		} else {
 			next();
 		}

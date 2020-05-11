@@ -1,5 +1,5 @@
 <template>
-	<div v-if="ready">
+	<div>
 		<transition appear name="fade-toast">
 			<div v-if="toastVisible" class="toast">
 				<div class="red-text tiny-text white-back">
@@ -57,6 +57,13 @@
 				<div class="new-session" @click="logout">
 					<h4 class="red-text small-text hover-red">Logout</h4>
 				</div>
+				<router-link
+					v-if="!user.email"
+					class="new-session"
+					:to="{ name: 'guest-registration' }"
+				>
+					<h4 class="red-text small-text hover-red">Create Account</h4>
+				</router-link>
 			</div>
 		</transition>
 		<app-circle></app-circle>
@@ -75,8 +82,7 @@ export default {
 			sessions: [],
 			toastVisible: false,
 			toastContent: "",
-			user: { userName: "Guest", uid: "", email: "" },
-			ready: false
+			user: null
 		};
 	},
 	components: {
@@ -98,6 +104,12 @@ export default {
 				});
 			}
 		},
+		enterCreateUser() {
+			this.$router.push({
+				name: "dashboard",
+				params: { uid: user.uid }
+			});
+		},
 		grabSessions() {
 			this.$http
 				.get(`sessions.json?orderBy="user"&equalTo="${this.user.uid}"`)
@@ -117,7 +129,6 @@ export default {
 						dataArray.push(session);
 					}
 					this.sessions = dataArray;
-					this.ready = true;
 				});
 		}
 	},

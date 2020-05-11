@@ -29,6 +29,12 @@
           <span class="red-text hover-red sign-up-margin">Sign Up</span>
         </router-link>
       </div>
+      <div class="login-label blue-text tiny-text">
+        Or
+        <span @click="anonSignin" class="red-text hover-red sign-up-margin"
+          >Enter as a Guest</span
+        >
+      </div>
     </div>
     <app-circle></app-circle>
   </div>
@@ -63,6 +69,23 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+        });
+    },
+    anonSignin() {
+      firebase
+        .auth()
+        .signInAnonymously()
+        .then(async (data) => {
+          await auth.setUser(data.user.uid);
+          this.$router.push({
+            name: "dashboard",
+            params: { update: "fromLanding" }
+          });
+        })
+        .catch((error) => {
+          // Handle Errors here.
+          console.log(error.message);
+          // ...
         });
     }
   }
