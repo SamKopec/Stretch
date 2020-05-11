@@ -77,7 +77,6 @@ export default {
         .signInAnonymously()
         .then(async (data) => {
           await auth.setUser(data.user.uid);
-          console.log("awaited done");
           this.$router.push({
             name: "dashboard",
             params: { update: "fromLanding" }

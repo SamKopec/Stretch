@@ -57,10 +57,7 @@
 				<div class="new-session" @click="logout">
 					<h4 class="red-text small-text hover-red">Logout</h4>
 				</div>
-				<router-link
-					class="new-session"
-					:to="{ name: 'guest-registration', params: { uid: user.uid } }"
-				>
+				<router-link class="new-session" :to="{ name: 'guest-registration' }">
 					<h4 class="red-text small-text hover-red">Create Account</h4>
 				</router-link>
 			</div>

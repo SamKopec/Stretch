@@ -29,7 +29,7 @@
 				/>
 			</div>
 			<div
-				@click="createUser"
+				@click="createUserFromGuest"
 				class="login-label red-text hover-red small-text"
 			>
 				Sign up
@@ -48,59 +48,53 @@ export default {
 		return {
 			userName: "",
 			email: "",
-			password: ""
+			password: "",
+			uid: null
 		};
 	},
 	components: {
 		"app-circle": Circle
 	},
+	created() {
+		let user = auth.getUser();
+		this.uid = user.uid;
+	},
 	methods: {
-		createUser() {
+		createUserFromGuest() {
+			const credential = firebase.auth.EmailAuthProvider.credential(
+				this.email,
+				this.password
+			);
 			firebase
 				.auth()
-				.createUserWithEmailAndPassword(this.email, this.password)
-				.then((data) => {
-					this.makeUser(data.user);
+				.currentUser.linkWithCredential(credential)
+				.then((usercred) => {
+					let user = usercred.user;
+					console.log("Anonymous account successfully upgraded", user);
+					this.addNameToGuest();
 				})
 				.catch((error) => {
-					console.log(error.message);
+					console.log("Error upgrading anonymous account", error);
 				});
 		},
-		makeUser(user) {
-			firebase
-				.database()
-				.ref("users/" + user.uid)
-				.set({
-					userName: this.userName,
-					email: this.email
-				})
-				.then(async () => {
-					await auth.setUser(user.uid);
+		addNameToGuest() {
+			const userURL = "users/" + this.uid + ".json";
+			let changedUser = {
+				email: this.email,
+				userName: this.userName
+			};
+			this.$http.put(userURL, changedUser).then(
+				async () => {
+					await auth.setUser(this.uid);
 					this.$router.push({
 						name: "dashboard",
 						params: { update: "fromLanding" }
 					});
-				})
-				.catch((error) => {
+				},
+				(error) => {
 					console.log(error);
-				});
-		},
-		anonSignin() {
-			firebase
-				.auth()
-				.signInAnonymously()
-				.then(async (data) => {
-					await auth.setUser(data.user.uid);
-					this.$router.push({
-						name: "dashboard",
-						params: { update: "fromLanding" }
-					});
-				})
-				.catch((error) => {
-					// Handle Errors here.
-					console.log(error.message);
-					// ...
-				});
+				}
+			);
 		}
 	}
 };
