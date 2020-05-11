@@ -5,6 +5,7 @@ import Timer from "./components/Timer.vue";
 import NewSession from "./components/NewSession.vue";
 import EditSession from "./components/EditSession.vue";
 import Login from "./components/Login.vue";
+import LoginChoice from "./components/LoginChoice.vue";
 import Register from "./components/Register.vue";
 import * as auth from "./services/auth";
 
@@ -43,6 +44,13 @@ export const routes = [
 		}
 	},
 	{
+		path: "/portal",
+		component: LoginChoice,
+		meta: {
+			requiresGuest: true
+		}
+	},
+	{
 		path: "/new-user",
 		component: Register,
 		meta: {
@@ -70,7 +78,7 @@ router.beforeEach((to, from, next) => {
 	console.log("Rerouting!", user);
 	if (to.matched.some((record) => record.meta.requiresAuth)) {
 		if (!user) {
-			next({ path: "/login", query: { redirect: to.fullPath } });
+			next({ path: "/portal", query: { redirect: to.fullPath } });
 		} else {
 			next();
 		}
