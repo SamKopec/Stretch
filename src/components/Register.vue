@@ -42,11 +42,9 @@
 			</div>
 			<div class="login-label blue-text tiny-text">
 				Or
-				<router-link :to="{ path: '/login' }">
-					<span class="red-text hover-red sign-up-margin"
-						>Enter as a Guest</span
-					>
-				</router-link>
+				<span @click="anonSignin" class="red-text hover-red sign-up-margin"
+					>Enter as a Guest</span
+				>
 			</div>
 		</div>
 		<app-circle></app-circle>
@@ -97,6 +95,24 @@ export default {
 				})
 				.catch((error) => {
 					console.log(error);
+				});
+		},
+		anonSignin() {
+			firebase
+				.auth()
+				.signInAnonymously()
+				.then(async (data) => {
+					await auth.setUser(data.user.uid);
+					console.log("awaited done");
+					this.$router.push({
+						name: "dashboard",
+						params: { update: "fromLanding" }
+					});
+				})
+				.catch((error) => {
+					// Handle Errors here.
+					console.log(error.message);
+					// ...
 				});
 		}
 	}
