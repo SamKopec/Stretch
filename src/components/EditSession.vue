@@ -70,6 +70,11 @@
 						Delete Session
 					</h3>
 				</div>
+				<div v-else class="button-container">
+					<h3 @click="cloneSession" class="red-text hover-red tiny-text">
+						Create Session
+					</h3>
+				</div>
 			</div>
 			<p class="vertical-divide tiny-text blue-text">
 				Drag Stretches Here to Add
@@ -277,6 +282,33 @@ export default {
 				}
 			} else {
 				console.log("UNAUTHORIZED", this.userUid, this.stretchUid);
+			}
+		},
+		cloneSession() {
+			this.determineDuration();
+			this.filterOutEmpties();
+			let user = auth.getUser();
+			let newSession = {
+				name: this.sessionName,
+				minutes: this.sessionMinutes,
+				seconds: this.sessionSeconds,
+				stretches: this.stretches,
+				user: user.uid
+			};
+			if (newSession.stretches.length >= 1) {
+				this.$http.post("sessions.json", newSession).then(
+					(response) => {
+						this.$router.push({
+							name: "dashboard",
+							params: { update: "created" }
+						});
+					},
+					(error) => {
+						console.log(error);
+					}
+				);
+			} else {
+				console.log("Add some stretches to your session");
 			}
 		},
 		determineDuration() {
