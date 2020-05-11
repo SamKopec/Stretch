@@ -69,8 +69,6 @@ export default {
 				.auth()
 				.currentUser.linkWithCredential(credential)
 				.then((usercred) => {
-					let user = usercred.user;
-					console.log("Anonymous account successfully upgraded", user);
 					this.addNameToGuest();
 				})
 				.catch((error) => {
