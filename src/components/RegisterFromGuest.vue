@@ -2,7 +2,7 @@
 	<div class="login-container">
 		<div class="form-container">
 			<div class="login-label">
-				<p class="red-text small-text">Sign Up</p>
+				<p class="red-text small-text">Create an Account</p>
 			</div>
 			<div>
 				<p class="blue-text tiny-text input-label">First Name</p>

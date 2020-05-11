@@ -54,12 +54,15 @@
 				>
 					<h4 class="red-text small-text hover-red">New Session</h4>
 				</router-link>
-				<div v-if="user.email" class="new-session" @click="logout">
+				<div class="new-session" @click="logout">
 					<h4 class="red-text small-text hover-red">Logout</h4>
 				</div>
-				<div v-else class="new-session" @click="logout">
+				<router-link
+					class="new-session"
+					:to="{ name: 'guest-registration', params: { uid: user.uid } }"
+				>
 					<h4 class="red-text small-text hover-red">Create Account</h4>
-				</div>
+				</router-link>
 			</div>
 		</transition>
 		<app-circle></app-circle>
@@ -130,7 +133,6 @@ export default {
 	},
 	async created() {
 		this.user = auth.getUser();
-		console.log(this.user);
 		if (this.$route.params.update === "created") {
 			this.showToast("Your Session was created");
 		} else if (this.$route.params.update === "deleted") {

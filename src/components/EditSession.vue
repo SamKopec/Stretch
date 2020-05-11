@@ -62,7 +62,7 @@
 						</draggable>
 					</div>
 				</div>
-				<div class="button-container">
+				<div v-if="userUid === stretchUid" class="button-container">
 					<h3 @click="editSession" class="red-text hover-red tiny-text">
 						Edit Session
 					</h3>
@@ -122,7 +122,8 @@ export default {
 			sessionUrl: "",
 			stretches: [],
 			toastVisible: false,
-			uid: null,
+			userUid: null,
+			stretchUid: null,
 			availableStretches: [],
 			constantStretches: [
 				{
@@ -190,6 +191,8 @@ export default {
 		};
 	},
 	created() {
+		const user = auth.getUser();
+		this.userUid = user.uid;
 		const newId = window.location.href.split("/").pop();
 		this.sessionUrl = "sessions/" + newId + ".json";
 
@@ -205,7 +208,7 @@ export default {
 			)
 			.then((data) => {
 				this.sessionName = data.name;
-				this.uid = data.user;
+				this.stretchUid = data.user;
 				this.stretches = data.stretches;
 			});
 
@@ -233,40 +236,47 @@ export default {
 		editSession() {
 			this.determineDuration();
 			this.filterOutEmpties();
-			let user = auth.getUser();
 			let changedSession = {
 				name: this.sessionName,
 				minutes: parseInt(this.sessionMinutes),
 				seconds: parseInt(this.sessionSeconds),
 				stretches: this.stretches,
-				user: this.uid
+				user: this.stretchUid
 			};
-			if (changedSession.stretches.length >= 1) {
-				this.$http.put(this.sessionUrl, changedSession).then(
-					() => {
-						this.showToast();
-					},
-					(error) => {
-						console.log(error);
-					}
-				);
+			if (this.userUid === this.stretchUid) {
+				if (changedSession.stretches.length >= 1) {
+					this.$http.put(this.sessionUrl, changedSession).then(
+						() => {
+							this.showToast();
+						},
+						(error) => {
+							console.log(error);
+						}
+					);
+				} else {
+					this.destroySession();
+				}
 			} else {
-				this.destroySession();
+				console.log("UNAUTHORIZED", this.userUid, this.stretchUid);
 			}
 		},
 		destroySession() {
-			if (confirm("Do you really want to delete?")) {
-				this.$http.delete(this.sessionUrl).then(
-					() => {
-						this.$router.push({
-							name: "dashboard",
-							params: { update: "deleted" }
-						});
-					},
-					(error) => {
-						console.log(error);
-					}
-				);
+			if (this.userUid === this.stretchUid) {
+				if (confirm("Do you really want to delete?")) {
+					this.$http.delete(this.sessionUrl).then(
+						() => {
+							this.$router.push({
+								name: "dashboard",
+								params: { update: "deleted" }
+							});
+						},
+						(error) => {
+							console.log(error);
+						}
+					);
+				}
+			} else {
+				console.log("UNAUTHORIZED", this.userUid, this.stretchUid);
 			}
 		},
 		determineDuration() {
