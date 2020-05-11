@@ -29,6 +29,14 @@
           <span class="red-text hover-red sign-up-margin">Sign Up</span>
         </router-link>
       </div>
+      <div class="login-label blue-text tiny-text">
+        Or
+        <router-link :to="{ path: '/portal' }">
+          <span class="red-text hover-red sign-up-margin"
+            >Enter as a Guest</span
+          >
+        </router-link>
+      </div>
     </div>
     <app-circle></app-circle>
   </div>
