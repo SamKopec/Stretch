@@ -10,13 +10,12 @@ export const setUser = (userUid) => {
 			.ref("users/" + userUid)
 			.once("value")
 			.then((snapshot) => {
-				console.log("snap", snapshot.val());
 				currentUser = snapshot.val();
 				currentUser.uid = userUid;
 				resolve();
 			})
-			.catch((err) => {
-				console.log(err);
+			.catch((error) => {
+				console.log("Error in Setting User", error);
 				reject(err);
 			});
 	});
@@ -36,8 +35,7 @@ export const createAnonUser = (userUid) => {
 				resolve();
 			})
 			.catch((error) => {
-				console.log("Erroring here?");
-				console.log(error);
+				console.log("Error in creating Anon User", error);
 				reject();
 			});
 	});
@@ -51,32 +49,30 @@ export const logout = () => {
 			.then(() => {
 				resolve(true);
 			})
-			.catch(function (error) {
+			.catch((error) => {
+				console.log("Error in Logout", error);
 				reject(false);
 			});
 	});
 };
 
 export const establishAuth = () => {
-	console.log("establishAuth");
 	return new Promise((resolve, reject) => {
 		firebase.auth().onAuthStateChanged(async (user) => {
 			//There is a user logged in
 			if (user) {
-				console.log("is anon?", user.isAnonymous);
-				console.log("is anon?", user.uid);
 				if (user.isAnonymous) {
 					try {
 						await createAnonUser(user.uid);
 						resolve();
-					} catch (error) {
+					} catch {
 						reject();
 					}
 				} else {
 					try {
 						await setUser(user.uid);
 						resolve();
-					} catch (error) {
+					} catch {
 						reject();
 					}
 				}
@@ -84,7 +80,6 @@ export const establishAuth = () => {
 			//There is no user logged in
 			else {
 				currentUser = null;
-				//logic for reroute to login page
 				resolve();
 			}
 		});
