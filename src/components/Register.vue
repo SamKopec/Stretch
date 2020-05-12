@@ -77,26 +77,31 @@ export default {
 	},
 	methods: {
 		createUser() {
-			firebase
-				.auth()
-				.createUserWithEmailAndPassword(this.email, this.password)
-				.then((data) => {
-					this.makeUser(data.user);
-				})
-				.catch((error) => {
-					if (error.code === "auth/invalid-email") {
-						this.invalidInput = true;
-						this.errorContent = "Invalid email";
-					} else if (error.code === "auth/weak-password") {
-						this.invalidInput = true;
-						this.errorContent = "Password should be at least 6 characters";
-					} else if (error.code === "auth/email-already-in-use") {
-						this.invalidInput = true;
-						this.errorContent = "The email address is already in use";
-					} else {
-						console.log(error);
-					}
-				});
+			if (this.userName.trim() !== "") {
+				firebase
+					.auth()
+					.createUserWithEmailAndPassword(this.email, this.password)
+					.then((data) => {
+						this.makeUser(data.user);
+					})
+					.catch((error) => {
+						if (error.code === "auth/invalid-email") {
+							this.invalidInput = true;
+							this.errorContent = "Invalid email";
+						} else if (error.code === "auth/weak-password") {
+							this.invalidInput = true;
+							this.errorContent = "Password should be at least 6 characters";
+						} else if (error.code === "auth/email-already-in-use") {
+							this.invalidInput = true;
+							this.errorContent = "The email address is already in use";
+						} else {
+							console.log(error);
+						}
+					});
+			} else {
+				this.invalidInput = true;
+				this.errorContent = "Must enter username";
+			}
 		},
 		makeUser(user) {
 			firebase
