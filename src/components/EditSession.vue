@@ -113,8 +113,6 @@
 	</transition>
 </template>
 
-<!-- :src="'~/assets/Icons/' + stretch.icon" -->
-
 <script>
 import draggable from "vuedraggable";
 import * as auth from "../services/auth";
