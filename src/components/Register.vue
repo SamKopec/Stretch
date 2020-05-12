@@ -1,5 +1,12 @@
 <template>
 	<div class="login-container">
+		<transition appear name="fade-toast">
+			<div v-if="invalidInput" class="toast">
+				<div class="red-text tiny-text white-back">
+					{{ errorContent }}
+				</div>
+			</div>
+		</transition>
 		<div class="form-container">
 			<div class="login-label">
 				<p class="red-text small-text">Sign Up</p>
@@ -24,7 +31,7 @@
 				<p class="blue-text tiny-text input-label">Password</p>
 				<input
 					class="login-input full-input blue-text tiny-text"
-					type="text"
+					type="password"
 					v-model="password"
 				/>
 			</div>
@@ -60,7 +67,9 @@ export default {
 		return {
 			userName: "",
 			email: "",
-			password: ""
+			password: "",
+			invalidInput: false,
+			errorContent: null
 		};
 	},
 	components: {
@@ -68,15 +77,31 @@ export default {
 	},
 	methods: {
 		createUser() {
-			firebase
-				.auth()
-				.createUserWithEmailAndPassword(this.email, this.password)
-				.then((data) => {
-					this.makeUser(data.user);
-				})
-				.catch((error) => {
-					console.log(error.message);
-				});
+			if (this.userName.trim() !== "") {
+				firebase
+					.auth()
+					.createUserWithEmailAndPassword(this.email, this.password)
+					.then((data) => {
+						this.makeUser(data.user);
+					})
+					.catch((error) => {
+						if (error.code === "auth/invalid-email") {
+							this.invalidInput = true;
+							this.errorContent = "Invalid email";
+						} else if (error.code === "auth/weak-password") {
+							this.invalidInput = true;
+							this.errorContent = "Password should be at least 6 characters";
+						} else if (error.code === "auth/email-already-in-use") {
+							this.invalidInput = true;
+							this.errorContent = "The email address is already in use";
+						} else {
+							console.log(error);
+						}
+					});
+			} else {
+				this.invalidInput = true;
+				this.errorContent = "Must enter username";
+			}
 		},
 		makeUser(user) {
 			firebase

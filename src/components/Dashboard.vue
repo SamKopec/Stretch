@@ -18,7 +18,7 @@
 				<h4 class="medium-text red-text">Your Sessions:</h4>
 				<div class="session-container">
 					<p v-if="sessions.length === 0" class="small-text blue-text">
-						No sessions right now!
+						Add some sessions to begin!
 					</p>
 					<div
 						class="session-each"
@@ -52,7 +52,7 @@
 					class="new-session button-margin"
 					:to="{ path: '/newsession' }"
 				>
-					<h4 class="red-text small-text hover-red">New Session</h4>
+					<h4 class="red-text small-text hover-red">+ New Session</h4>
 				</router-link>
 				<div class="new-session" @click="logout">
 					<h4 class="red-text small-text hover-red">Logout</h4>

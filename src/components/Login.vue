@@ -1,5 +1,12 @@
 <template>
   <div class="login-container">
+    <transition appear name="fade-toast">
+      <div v-if="invalidInput" class="toast">
+        <div class="red-text tiny-text white-back">
+          {{ errorContent }}
+        </div>
+      </div>
+    </transition>
     <div class="form-container">
       <div class="login-label">
         <p class="red-text small-text">User Login</p>
@@ -16,7 +23,7 @@
         <p class="blue-text tiny-text input-label">Password</p>
         <input
           class="login-input full-input blue-text tiny-text"
-          type="text"
+          type="password"
           v-model="password"
         />
       </div>
@@ -49,7 +56,9 @@ export default {
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
+      invalidInput: false,
+      errorContent: null
     };
   },
   components: {
@@ -68,7 +77,13 @@ export default {
           });
         })
         .catch((error) => {
-          console.log(error);
+          if (error.code === "auth/user-not-found") {
+            this.invalidInput = true;
+            this.errorContent = "Your email or password was incorrect";
+          } else if (error.code === "auth/invalid-email") {
+            this.invalidInput = true;
+            this.errorContent = "Invalid email";
+          }
         });
     },
     anonSignin() {

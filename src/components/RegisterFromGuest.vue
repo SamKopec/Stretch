@@ -1,5 +1,12 @@
 <template>
 	<div class="login-container">
+		<transition appear name="fade-toast">
+			<div v-if="invalidInput" class="toast">
+				<div class="red-text tiny-text white-back">
+					{{ errorContent }}
+				</div>
+			</div>
+		</transition>
 		<div class="form-container">
 			<div class="login-label">
 				<p class="red-text small-text">Create an Account</p>
@@ -24,7 +31,7 @@
 				<p class="blue-text tiny-text input-label">Password</p>
 				<input
 					class="login-input full-input blue-text tiny-text"
-					type="text"
+					type="password"
 					v-model="password"
 				/>
 			</div>
@@ -49,7 +56,9 @@ export default {
 			userName: "",
 			email: "",
 			password: "",
-			uid: null
+			uid: null,
+			invalidInput: false,
+			errorContent: null
 		};
 	},
 	components: {
@@ -61,19 +70,35 @@ export default {
 	},
 	methods: {
 		createUserFromGuest() {
-			const credential = firebase.auth.EmailAuthProvider.credential(
-				this.email,
-				this.password
-			);
-			firebase
-				.auth()
-				.currentUser.linkWithCredential(credential)
-				.then((usercred) => {
-					this.addNameToGuest();
-				})
-				.catch((error) => {
-					console.log("Error upgrading anonymous account", error);
-				});
+			if (this.userName.trim() !== "") {
+				const credential = firebase.auth.EmailAuthProvider.credential(
+					this.email,
+					this.password
+				);
+				firebase
+					.auth()
+					.currentUser.linkWithCredential(credential)
+					.then((usercred) => {
+						this.addNameToGuest();
+					})
+					.catch((error) => {
+						if (error.code === "auth/invalid-email") {
+							this.invalidInput = true;
+							this.errorContent = "Invalid email";
+						} else if (error.code === "auth/weak-password") {
+							this.invalidInput = true;
+							this.errorContent = "Password should be at least 6 characters";
+						} else if (error.code === "auth/email-already-in-use") {
+							this.invalidInput = true;
+							this.errorContent = "The email address is already in use";
+						} else {
+							console.log("Error upgrading anonymous account", error);
+						}
+					});
+			} else {
+				this.invalidInput = true;
+				this.errorContent = "Must enter username";
+			}
 		},
 		addNameToGuest() {
 			const userURL = "users/" + this.uid + ".json";

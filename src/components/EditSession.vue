@@ -70,6 +70,11 @@
 						Delete Session
 					</h3>
 				</div>
+				<div v-else class="button-container">
+					<h3 @click="cloneSession" class="red-text hover-red tiny-text">
+						Create Session
+					</h3>
+				</div>
 			</div>
 			<p class="vertical-divide tiny-text blue-text">
 				Drag Stretches Here to Add
@@ -108,11 +113,10 @@
 	</transition>
 </template>
 
-<!-- :src="'~/assets/Icons/' + stretch.icon" -->
-
 <script>
 import draggable from "vuedraggable";
 import * as auth from "../services/auth";
+import { stretchesList } from "../data/stretches";
 export default {
 	data() {
 		return {
@@ -125,69 +129,7 @@ export default {
 			userUid: null,
 			stretchUid: null,
 			availableStretches: [],
-			constantStretches: [
-				{
-					name: "Forward Stretch",
-					icon: "ForwardFull.svg",
-					minutes: "1",
-					seconds: "0"
-				},
-				{
-					name: "Forward Bend",
-					icon: "ForwardBendFull.svg",
-					minutes: "1",
-					seconds: "0"
-				},
-				{
-					name: "Butterfly",
-					icon: "ButterflyFull.svg",
-					minutes: "1",
-					seconds: "0"
-				},
-				{
-					name: "Leg Raise",
-					icon: "LegRaiseFull.svg",
-					minutes: "1",
-					seconds: "0"
-				},
-				{ name: "Lunge", icon: "LungeFull.svg", minutes: "1", seconds: "0" },
-				{
-					name: "Single Leg Forward",
-					icon: "SingleLegForwardFull.svg",
-					minutes: "1",
-					seconds: "0"
-				},
-				{
-					name: "Step Forward",
-					icon: "StepForwardFull.svg",
-					minutes: "1",
-					seconds: "0"
-				},
-				{
-					name: "Calf Stretch",
-					icon: "CalfStretchFull.svg",
-					minutes: "1",
-					seconds: "0"
-				},
-				{
-					name: "Quad Stretch",
-					icon: "QuadStretchFull.svg",
-					minutes: "1",
-					seconds: "0"
-				},
-				{
-					name: "Overhead Stretch",
-					icon: "OverHeadStretch.svg",
-					minutes: "1",
-					seconds: "0"
-				},
-				{
-					name: "Cross Arm Stretch",
-					icon: "CrossArmFull.svg",
-					minutes: "1",
-					seconds: "0"
-				}
-			]
+			constantStretches: stretchesList
 		};
 	},
 	created() {
@@ -277,6 +219,33 @@ export default {
 				}
 			} else {
 				console.log("UNAUTHORIZED", this.userUid, this.stretchUid);
+			}
+		},
+		cloneSession() {
+			this.determineDuration();
+			this.filterOutEmpties();
+			let user = auth.getUser();
+			let newSession = {
+				name: this.sessionName,
+				minutes: this.sessionMinutes,
+				seconds: this.sessionSeconds,
+				stretches: this.stretches,
+				user: user.uid
+			};
+			if (newSession.stretches.length >= 1) {
+				this.$http.post("sessions.json", newSession).then(
+					(response) => {
+						this.$router.push({
+							name: "dashboard",
+							params: { update: "created" }
+						});
+					},
+					(error) => {
+						console.log(error);
+					}
+				);
+			} else {
+				console.log("Add some stretches to your session");
 			}
 		},
 		determineDuration() {
