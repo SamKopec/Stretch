@@ -48,22 +48,19 @@
 
 		<transition v-if="newVisible" appear name="fade">
 			<div>
-				<router-link
-					class="new-session button-margin"
-					:to="{ path: '/newsession' }"
-				>
-					<h4 class="red-text small-text hover-red">+ New Session</h4>
-				</router-link>
+				<div class="new-session">
+					<h4 @click="newSession" class="small-text red-text hover-red">
+						+ New Session
+					</h4>
+				</div>
 				<div class="new-session">
 					<h4 @click="logout" class="red-text small-text hover-red">Logout</h4>
 				</div>
-				<router-link
-					v-if="!user.email"
-					class="new-session"
-					:to="{ name: 'guest-registration' }"
-				>
-					<h4 class="red-text small-text hover-red">Create Account</h4>
-				</router-link>
+				<div v-if="!user.email" class="new-session">
+					<h4 @click="createAccount" class="red-text small-text hover-red">
+						Create Account
+					</h4>
+				</div>
 			</div>
 		</transition>
 		<app-circle></app-circle>
@@ -95,6 +92,16 @@ export default {
 			setTimeout(() => {
 				this.toastVisible = false;
 			}, 2000);
+		},
+		newSession() {
+			this.$router.push({
+				path: "/newsession"
+			});
+		},
+		createAccount() {
+			this.$router.push({
+				name: "guest-registration"
+			});
 		},
 		async logout() {
 			const isSignedOut = await auth.logout();

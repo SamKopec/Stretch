@@ -18,6 +18,7 @@
 
 <script>
 import Circle from "./Circle.vue";
+import * as auth from "../services/auth";
 export default {
   name: "app",
   data() {
@@ -35,10 +36,17 @@ export default {
   },
   methods: {
     toDash() {
-      this.$router.push({
-        name: "dashboard",
-        params: { update: "fromLanding" }
-      });
+      const user = auth.getUser();
+      if (user) {
+        this.$router.push({
+          name: "dashboard",
+          params: { update: "fromLanding" }
+        });
+      } else {
+        this.$router.push({
+          path: "/portal"
+        });
+      }
     }
   }
 };
