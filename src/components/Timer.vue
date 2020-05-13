@@ -28,6 +28,11 @@
         <h1 class="timer blue-text">{{ clock }}</h1>
       </div>
       <div class="timer-container">
+        <h3 @click="prevStretch" class="red-text hover-red">
+          Previous Stretch
+        </h3>
+      </div>
+      <div class="timer-container">
         <h3 @click="nextStretch" class="red-text hover-red">
           Next Stretch
         </h3>
@@ -149,6 +154,21 @@ export default {
       clearInterval(this.timer);
       this.timerStarted = false;
       this.currentIndex = this.currentIndex + 1;
+      this.setTimer();
+      if (this.setWaitingTimer) {
+        this.playRestNoise();
+        this.setupWaitingTimer();
+      } else {
+        this.startTimer();
+      }
+    },
+    prevStretch() {
+      clearInterval(this.timer);
+      this.timerStarted = false;
+      if (this.currentIndex > 0) {
+        this.currentIndex = this.currentIndex - 1;
+      }
+
       this.setTimer();
       if (this.setWaitingTimer) {
         this.playRestNoise();
