@@ -35,12 +35,11 @@
 					v-model="password"
 				/>
 			</div>
-			<div
-				@click="createUser"
-				class="login-label red-text hover-red small-text"
-			>
-				Sign up
+
+			<div class="login-label">
+				<p @click="createUser" class="red-text hover-red small-text">Sign up</p>
 			</div>
+
 			<div class="login-label blue-text tiny-text">
 				Existing Account?
 				<router-link :to="{ path: '/login' }">

@@ -27,9 +27,10 @@
           v-model="password"
         />
       </div>
-      <div @click="signIn" class="login-label red-text hover-red small-text">
-        Login
+      <div class="login-label">
+        <p @click="signIn" class="red-text hover-red small-text">Login</p>
       </div>
+
       <div class="login-label blue-text tiny-text">
         New to Stretch?
         <router-link :to="{ path: '/new-user' }">
@@ -83,6 +84,9 @@ export default {
           } else if (error.code === "auth/invalid-email") {
             this.invalidInput = true;
             this.errorContent = "Invalid email";
+          } else {
+            this.invalidInput = true;
+            this.errorContent = error.message;
           }
         });
     },

@@ -12,7 +12,7 @@
 export default {
   data() {
     return {};
-  },
+  }
 };
 </script>
 
@@ -23,30 +23,21 @@ export default {
   z-index: -1;
   border-radius: 100%;
   right: -300px;
-  /*top: -357px;*/
   top: -840px;
 }
 
 .circle-1 {
-  /*width: 1000px;
-  height: 1000px;*/
   width: 1575px;
   height: 1575px;
 }
 
 .circle-2 {
-  /*  width: 1030px;
-  height: 1030px;
-  opacity: 65%;*/
   width: 1600px;
   height: 1600px;
   opacity: 65%;
 }
 
 .circle-3 {
-  /*  width: 1080px;
-  height: 1080px;
-  opacity: 50%;*/
   width: 1645px;
   height: 1645px;
   opacity: 50%;

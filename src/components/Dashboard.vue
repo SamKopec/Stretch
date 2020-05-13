@@ -54,8 +54,8 @@
 				>
 					<h4 class="red-text small-text hover-red">+ New Session</h4>
 				</router-link>
-				<div class="new-session" @click="logout">
-					<h4 class="red-text small-text hover-red">Logout</h4>
+				<div class="new-session">
+					<h4 @click="logout" class="red-text small-text hover-red">Logout</h4>
 				</div>
 				<router-link
 					v-if="!user.email"
